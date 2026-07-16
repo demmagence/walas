@@ -18,6 +18,8 @@ import {
   FileText
 } from "lucide-react"
 
+import { exportStudentRaporPDF } from "@/lib/export-pdf"
+
 export default function StudentDetailsClient({ role, student, attendances, grades }) {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState("biodata")
@@ -63,14 +65,26 @@ export default function StudentDetailsClient({ role, student, attendances, grade
           <span>Kembali</span>
         </Button>
 
-        {isWaliKelas && (
-          <Link href={`/dashboard/siswa/${student.id}/edit`}>
-            <Button className="rounded-xl h-10 px-4 gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm">
-              <Edit2 className="h-4 w-4" />
-              <span>Edit Biodata</span>
-            </Button>
-          </Link>
-        )}
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            className="rounded-xl h-10 px-3.5 gap-2 font-semibold border-primary/20 text-primary hover:bg-primary/5 shadow-sm"
+            onClick={() => exportStudentRaporPDF({ student, grades })}
+            disabled={grades.length === 0}
+          >
+            <FileText className="h-4 w-4" />
+            <span>Ekspor PDF (Rapor)</span>
+          </Button>
+
+          {isWaliKelas && (
+            <Link href={`/dashboard/siswa/${student.id}/edit`}>
+              <Button className="rounded-xl h-10 px-4 gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm">
+                <Edit2 className="h-4 w-4" />
+                <span>Edit Biodata</span>
+              </Button>
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Profile Header Summary */}

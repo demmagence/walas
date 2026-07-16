@@ -12,8 +12,10 @@ import {
   Search, 
   Clock, 
   TrendingUp,
-  AlertCircle
+  AlertCircle,
+  FileText
 } from "lucide-react"
+import { exportAttendanceRekapPDF } from "@/lib/export-pdf"
 
 export default function AttendanceRekapClient({ role, students, classes }) {
   const router = useRouter()
@@ -122,8 +124,8 @@ export default function AttendanceRekapClient({ role, students, classes }) {
 
   return (
     <div className="space-y-6">
-      {/* Back Button */}
-      <div>
+      {/* Back Button & Actions */}
+      <div className="flex items-center justify-between">
         <Button
           variant="outline"
           className="rounded-xl h-10 px-3.5 gap-2 font-semibold"
@@ -131,6 +133,25 @@ export default function AttendanceRekapClient({ role, students, classes }) {
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Kembali</span>
+        </Button>
+
+        <Button
+          variant="outline"
+          className="rounded-xl h-10 px-3.5 gap-2 font-semibold border-primary/20 text-primary hover:bg-primary/5 shadow-sm"
+          onClick={() => {
+            const className = selectedClass === "all" ? "Semua Kelas" : classes.find(c => c.id === selectedClass)?.name || ""
+            exportAttendanceRekapPDF({
+              className,
+              startDate,
+              endDate,
+              students: filteredStudents,
+              aggregates
+            })
+          }}
+          disabled={filteredStudents.length === 0}
+        >
+          <FileText className="h-4 w-4" />
+          <span>Ekspor PDF (Rekap)</span>
         </Button>
       </div>
 
