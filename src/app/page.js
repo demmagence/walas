@@ -12,79 +12,23 @@ export default async function Home() {
     redirect('/login')
   }
 
-  // Fetch user profile from the database to determine role
+  // Fetch user profile to determine role-based redirect
   const { data: profile, error } = await supabase
     .from('profiles')
-    .select('role, full_name')
+    .select('role')
     .eq('id', user.id)
     .single()
 
   if (error || !profile) {
-    // Session is invalid or profile not found, log out to be safe
     await supabase.auth.signOut()
     redirect('/login')
   }
 
-  const { role, full_name } = profile
-
-  // Redirection rules:
-  // Admin -> /admin/kelas (or Admin home dashboard)
-  // Wali Kelas / Orang Tua -> / (render dashboard content here)
-  if (role === 'admin') {
+  // Route by role
+  if (profile.role === 'admin') {
     redirect('/admin/kelas')
   }
 
-  async function handleSignOut() {
-    'use server'
-    const supabase = await createClient()
-    await supabase.auth.signOut()
-    redirect('/login')
-  }
-
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 text-center">
-      <div className="max-w-md space-y-6 rounded-lg border border-border bg-card p-8 shadow-lg">
-        <div className="flex justify-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-        </div>
-        <div className="space-y-2">
-          <h1 className="text-2xl font-bold text-foreground">Selamat Datang, {full_name || 'Pengguna'}!</h1>
-          <p className="text-muted-foreground text-sm">
-            Anda masuk ke sistem sebagai <span className="font-semibold text-primary">{role === 'wali_kelas' ? 'Wali Kelas' : 'Orang Tua'}</span>.
-          </p>
-        </div>
-        
-        <div className="rounded-md bg-secondary p-4 text-left border border-border/50">
-          <h2 className="text-sm font-semibold text-secondary-foreground mb-1">Status Sistem:</h2>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Infrastruktur autentikasi dan basis data telah aktif. Modul fungsionalitas absensi dan nilai kelas sedang disiapkan dalam pengembangan.
-          </p>
-        </div>
-
-        <form action={handleSignOut} className="pt-2">
-          <button
-            type="submit"
-            className="w-full rounded-md bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground hover:bg-destructive/90 shadow active:scale-[0.98] transition-transform duration-75"
-          >
-            Keluar dari Akun
-          </button>
-        </form>
-      </div>
-    </div>
-  )
+  // Wali Kelas & Orang Tua → dashboard with bottom nav
+  redirect('/dashboard')
 }
