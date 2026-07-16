@@ -1,35 +1,132 @@
-import { GraduationCap } from "lucide-react"
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+import GradesClient from './grades-client'
 
 export const metadata = {
-  title: "Nilai — Walas SMK",
-  description: "Halaman pengelolaan nilai siswa",
+  title: 'Data Nilai Rapor — Walas SMK',
+  description: 'Pengelolaan nilai mata pelajaran dan rapor siswa',
 }
 
-export default function NilaiPage() {
+export default async function NilaiPage() {
+  const supabase = await createClient()
+
+  // Authenticate user
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    redirect('/login')
+  }
+
+  // Fetch profile to get role
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role, full_name')
+    .eq('id', user.id)
+    .single()
+
+  if (!profile) {
+    redirect('/login')
+  }
+
+  const { role } = profile
+
+  // Fetch active academic year
+  const { data: activeYear } = await supabase
+    .from('academic_years')
+    .select('id, name')
+    .eq('is_active', true)
+    .maybeSingle()
+
+  const activeAcademicYearId = activeYear?.id || ''
+
+  let initialSubjects = []
+  let classes = []
+
+  if (role === 'wali_kelas') {
+    // Fetch classes managed by this homeroom teacher
+    const { data: managedClasses } = await supabase
+      .from('classes')
+      .select('id, name, grade_level')
+      .eq('homeroom_teacher', user.id)
+
+    classes = managedClasses || []
+
+    if (classes.length > 0) {
+      const classIds = classes.map(c => c.id)
+      // Fetch subjects for these classes
+      const { data: subjectsList } = await supabase
+        .from('subjects')
+        .select('id, name, class_id')
+        .in('class_id', classIds)
+        .order('name', { ascending: true })
+
+      initialSubjects = subjectsList || []
+    }
+  } else if (role === 'orang_tua') {
+    // Fetch children profiles
+    const { data: children } = await supabase
+      .from('students')
+      .select('id, full_name, class_id')
+      .eq('parent_user_id', user.id)
+
+    const childIds = children?.map(c => c.id) || []
+    const childClassIds = children?.map(c => c.class_id).filter(Boolean) || []
+
+    if (childClassIds.length > 0) {
+      // Fetch classes of children
+      const { data: childClasses } = await supabase
+        .from('classes')
+        .select('id, name, grade_level')
+        .in('id', childClassIds)
+
+      classes = childClasses || []
+
+      // Fetch subjects of these classes with grades for the children
+      const { data: subjectsList } = await supabase
+        .from('subjects')
+        .select(`
+          id,
+          name,
+          class_id
+        `)
+        .in('class_id', childClassIds)
+        .order('name', { ascending: true })
+
+      // Fetch grades for these children separately to merge safely
+      const { data: gradesList } = await supabase
+        .from('grades')
+        .select('id, student_id, subject_id, semester, academic_year_id, score')
+        .in('student_id', childIds)
+
+      initialSubjects = (subjectsList || []).map(subject => {
+        // filter grades related to this subject
+        const subjectGrades = gradesList?.filter(g => g.subject_id === subject.id) || []
+        return {
+          ...subject,
+          grades: subjectGrades
+        }
+      })
+    }
+  }
+
   return (
-    <div className="px-4 py-6 md:px-8 md:py-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-foreground md:text-3xl">
-          Nilai
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Kelola dan lihat nilai siswa per mata pelajaran
-        </p>
+    <div className="px-4 py-6 md:px-8 md:py-8 max-w-7xl mx-auto space-y-6">
+      <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground md:text-3xl">Nilai Akademik</h1>
+          <p className="text-sm text-muted-foreground">
+            {role === 'wali_kelas'
+              ? 'Kelola daftar mata pelajaran dan input nilai siswa kelas binaan'
+              : 'Pantau nilai akademik rapor per semester untuk anak Anda'}
+          </p>
+        </div>
       </div>
 
-      {/* Placeholder */}
-      <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card/50 px-6 py-16 text-center">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary mb-4">
-          <GraduationCap className="h-7 w-7" />
-        </div>
-        <h2 className="text-lg font-semibold text-foreground">
-          Segera Hadir
-        </h2>
-        <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-          Fitur pengelolaan nilai sedang dalam pengembangan. Anda akan
-          dapat menginput dan melihat nilai siswa per mata pelajaran.
-        </p>
-      </div>
+      <GradesClient
+        role={role}
+        initialSubjects={initialSubjects}
+        classes={classes}
+        activeAcademicYearId={activeAcademicYearId}
+      />
     </div>
   )
 }
