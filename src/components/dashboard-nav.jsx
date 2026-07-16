@@ -70,7 +70,7 @@ export default function DashboardNav() {
                 <Link
                   href={item.href}
                   className={cn(
-                    "flex flex-col items-center gap-0.5 rounded-xl px-3 py-1.5 text-[11px] font-medium transition-all duration-200",
+                    "relative flex flex-col items-center gap-0.5 rounded-xl px-3 py-1.5 text-[11px] font-medium transition-all duration-200",
                     active
                       ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"
