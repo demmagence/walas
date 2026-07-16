@@ -13,8 +13,11 @@ import {
   Edit2, 
   Trash2, 
   UserPlus,
-  AlertTriangle
+  AlertTriangle,
+  FileSpreadsheet,
+  Download
 } from "lucide-react"
+import { exportStudentListToExcel } from "@/lib/excel"
 
 export default function StudentDirectoryClient({ role, initialStudents, classes }) {
   const supabase = createClient()
@@ -59,6 +62,17 @@ export default function StudentDirectoryClient({ role, initialStudents, classes 
     }
   }
 
+  const handleExport = () => {
+    let className = "Semua_Kelas"
+    if (selectedClass !== "all") {
+      const cls = classes.find(c => c.id === selectedClass)
+      if (cls) {
+        className = `Kelas_${cls.name || cls.grade_level}`
+      }
+    }
+    exportStudentListToExcel(filteredStudents, className)
+  }
+
   const isWaliKelas = role === "wali_kelas"
 
   return (
@@ -101,15 +115,36 @@ export default function StudentDirectoryClient({ role, initialStudents, classes 
           </div>
         </div>
 
-        {/* Add Student Action (Wali Kelas only) */}
-        {isWaliKelas && (
-          <Link href="/dashboard/siswa/tambah">
-            <Button className="w-full sm:w-auto h-10 px-4 rounded-xl gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm">
-              <Plus className="h-5 w-5" />
-              <span>Tambah Siswa</span>
-            </Button>
-          </Link>
-        )}
+        {/* Action buttons (Wali Kelas / General) */}
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={handleExport}
+            disabled={filteredStudents.length === 0}
+            className="w-full sm:w-auto h-10 px-4 rounded-xl gap-2 font-semibold"
+          >
+            <Download className="h-4 w-4" />
+            <span>Ekspor Excel</span>
+          </Button>
+
+          {isWaliKelas && (
+            <>
+              <Link href="/dashboard/siswa/import">
+                <Button variant="outline" className="w-full sm:w-auto h-10 px-4 rounded-xl gap-2 font-semibold text-primary hover:text-primary-foreground hover:bg-primary border-primary/40">
+                  <FileSpreadsheet className="h-4 w-4" />
+                  <span>Impor Excel</span>
+                </Button>
+              </Link>
+
+              <Link href="/dashboard/siswa/tambah">
+                <Button className="w-full sm:w-auto h-10 px-4 rounded-xl gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm">
+                  <Plus className="h-5 w-5" />
+                  <span>Tambah Siswa</span>
+                </Button>
+              </Link>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Directory Table / Cards */}
