@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
@@ -46,13 +46,15 @@ export default function AttendanceRekapClient({ role, students, classes }) {
   const [error, setError] = useState(null)
 
   // Filter students based on selected class and search
-  const filteredStudents = students.filter((s) => {
-    const matchesClass = selectedClass === "all" || s.class_id === selectedClass
-    const matchesSearch = s.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      s.nisn?.includes(searchQuery) ||
-      s.nis?.includes(searchQuery)
-    return matchesClass && matchesSearch
-  })
+  const filteredStudents = useMemo(() => {
+    return students.filter((s) => {
+      const matchesClass = selectedClass === "all" || s.class_id === selectedClass
+      const matchesSearch = s.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        s.nisn?.includes(searchQuery) ||
+        s.nis?.includes(searchQuery)
+      return matchesClass && matchesSearch
+    })
+  }, [students, selectedClass, searchQuery])
 
   // Fetch and aggregate attendance logs
   useEffect(() => {
@@ -100,7 +102,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
     }
 
     fetchAndAggregate()
-  }, [startDate, endDate, selectedClass, searchQuery])
+  }, [startDate, endDate, filteredStudents, supabase])
 
   // Helper to compute percentage
   const calculatePercentage = (stats) => {

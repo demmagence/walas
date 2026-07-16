@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
@@ -37,9 +37,11 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
   const isWaliKelas = role === "wali_kelas"
 
   // Filter students by selected class
-  const filteredStudents = students.filter((s) => {
-    return selectedClass === "all" || s.class_id === selectedClass
-  })
+  const filteredStudents = useMemo(() => {
+    return students.filter((s) => {
+      return selectedClass === "all" || s.class_id === selectedClass
+    })
+  }, [students, selectedClass])
 
   // Fetch attendance records when date or class changes
   useEffect(() => {
@@ -91,7 +93,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
     }
 
     fetchAttendance()
-  }, [date, selectedClass])
+  }, [date, filteredStudents, supabase])
 
   // Handle status toggle change
   const handleStatusChange = (studentId, status) => {
