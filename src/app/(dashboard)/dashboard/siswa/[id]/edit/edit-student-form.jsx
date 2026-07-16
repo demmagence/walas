@@ -1,0 +1,285 @@
+"use client"
+
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { ArrowLeft, Save, AlertCircle } from "lucide-react"
+
+export default function EditStudentForm({ student, classes, parents }) {
+  const router = useRouter()
+  const supabase = createClient()
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  const [formData, setFormData] = useState({
+    full_name: student.full_name || "",
+    nisn: student.nisn || "",
+    nis: student.nis || "",
+    birth_place: student.birth_place || "",
+    birth_date: student.birth_date || "",
+    gender: student.gender || "laki-laki",
+    religion: student.religion || "",
+    address: student.address || "",
+    phone: student.phone || "",
+    class_id: student.class_id || "",
+    parent_user_id: student.parent_user_id || "",
+  })
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    if (!formData.full_name.trim()) {
+      setError("Nama lengkap wajib diisi.")
+      setLoading(false)
+      return
+    }
+
+    if (!formData.class_id) {
+      setError("Kelas wajib dipilih.")
+      setLoading(false)
+      return
+    }
+
+    try {
+      const studentPayload = {
+        full_name: formData.full_name.trim(),
+        nisn: formData.nisn.trim() || null,
+        nis: formData.nis.trim() || null,
+        birth_place: formData.birth_place.trim() || null,
+        birth_date: formData.birth_date || null,
+        gender: formData.gender || null,
+        religion: formData.religion.trim() || null,
+        address: formData.address.trim() || null,
+        phone: formData.phone.trim() || null,
+        class_id: formData.class_id,
+        parent_user_id: formData.parent_user_id || null,
+      }
+
+      const { error: updateError } = await supabase
+        .from("students")
+        .update(studentPayload)
+        .eq("id", student.id)
+
+      if (updateError) throw updateError
+
+      router.push("/dashboard/siswa")
+      router.refresh()
+    } catch (err) {
+      setError(err.message || "Gagal memperbarui biodata siswa.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6 bg-card border border-border rounded-2xl p-6 shadow-sm">
+      {error && (
+        <div className="flex items-center gap-2.5 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+          <AlertCircle className="h-5 w-5 flex-shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {/* Row 1: Name & Class */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="full_name">Nama Lengkap *</Label>
+          <Input
+            id="full_name"
+            name="full_name"
+            type="text"
+            required
+            value={formData.full_name}
+            onChange={handleChange}
+            placeholder="Masukkan nama lengkap siswa..."
+            className="h-10 rounded-xl"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="class_id">Kelas *</Label>
+          <select
+            id="class_id"
+            name="class_id"
+            required
+            value={formData.class_id}
+            onChange={handleChange}
+            className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+          >
+            <option value="">-- Pilih Kelas --</option>
+            {classes.map((cls) => (
+              <option key={cls.id} value={cls.id}>
+                Kelas {cls.name || `${cls.grade_level}`}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Row 2: NISN & NIS */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="nisn">NISN</Label>
+          <Input
+            id="nisn"
+            name="nisn"
+            type="text"
+            value={formData.nisn}
+            onChange={handleChange}
+            placeholder="Nomor Induk Siswa Nasional (10 digit)..."
+            className="h-10 rounded-xl font-mono"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="nis">NIS</Label>
+          <Input
+            id="nis"
+            name="nis"
+            type="text"
+            value={formData.nis}
+            onChange={handleChange}
+            placeholder="Nomor Induk Siswa..."
+            className="h-10 rounded-xl font-mono"
+          />
+        </div>
+      </div>
+
+      {/* Row 3: Birth Place & Birth Date */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="birth_place">Tempat Lahir</Label>
+          <Input
+            id="birth_place"
+            name="birth_place"
+            type="text"
+            value={formData.birth_place}
+            onChange={handleChange}
+            placeholder="Contoh: Jakarta"
+            className="h-10 rounded-xl"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="birth_date">Tanggal Lahir</Label>
+          <Input
+            id="birth_date"
+            name="birth_date"
+            type="date"
+            value={formData.birth_date}
+            onChange={handleChange}
+            className="h-10 rounded-xl"
+          />
+        </div>
+      </div>
+
+      {/* Row 4: Gender & Religion */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="gender">Jenis Kelamin</Label>
+          <select
+            id="gender"
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+          >
+            <option value="laki-laki">Laki-Laki</option>
+            <option value="perempuan">Perempuan</option>
+          </select>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="religion">Agama</Label>
+          <Input
+            id="religion"
+            name="religion"
+            type="text"
+            value={formData.religion}
+            onChange={handleChange}
+            placeholder="Contoh: Islam, Kristen, dll."
+            className="h-10 rounded-xl"
+          />
+        </div>
+      </div>
+
+      {/* Row 5: Phone & Parent User Link */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="phone">No. Telepon</Label>
+          <Input
+            id="phone"
+            name="phone"
+            type="tel"
+            value={formData.phone}
+            onChange={handleChange}
+            placeholder="Nomor HP siswa/kontak..."
+            className="h-10 rounded-xl"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="parent_user_id">Hubungkan Wali / Orang Tua</Label>
+          <select
+            id="parent_user_id"
+            name="parent_user_id"
+            value={formData.parent_user_id}
+            onChange={handleChange}
+            className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+          >
+            <option value="">-- Pilih Orang Tua / Wali --</option>
+            {parents.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.full_name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Address Textarea */}
+      <div className="space-y-1.5">
+        <Label htmlFor="address">Alamat Lengkap</Label>
+        <textarea
+          id="address"
+          name="address"
+          rows={3}
+          value={formData.address}
+          onChange={handleChange}
+          placeholder="Masukkan alamat lengkap siswa..."
+          className="w-full px-3 py-2 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-card"
+        />
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex items-center justify-end gap-3 pt-4 border-t border-border/50">
+        <Button
+          type="button"
+          variant="outline"
+          className="h-10 px-4 rounded-xl gap-2 font-semibold"
+          onClick={() => router.push("/dashboard/siswa")}
+          disabled={loading}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          <span>Batal</span>
+        </Button>
+        <Button
+          type="submit"
+          className="h-10 px-4 rounded-xl gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm"
+          disabled={loading}
+        >
+          <Save className="h-4 w-4" />
+          <span>{loading ? "Menyimpan..." : "Simpan Perubahan"}</span>
+        </Button>
+      </div>
+    </form>
+  )
+}
