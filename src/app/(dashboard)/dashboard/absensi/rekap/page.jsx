@@ -1,13 +1,13 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import AttendanceLoggingClient from "./attendance-logging-client"
+import AttendanceRekapClient from "./attendance-rekap-client"
 
 export const metadata = {
-  title: "Absensi — Walas SMK",
-  description: "Pencatatan dan pengelolaan absensi siswa harian",
+  title: "Rekap Absensi — Walas SMK",
+  description: "Laporan rekapitulasi kehadiran siswa",
 }
 
-export default async function AbsensiPage() {
+export default async function RekapAbsensiPage() {
   const supabase = await createClient()
 
   const {
@@ -18,7 +18,6 @@ export default async function AbsensiPage() {
     redirect("/login")
   }
 
-  // Fetch profile to get role
   const { data: profile } = await supabase
     .from("profiles")
     .select("role, full_name")
@@ -35,7 +34,7 @@ export default async function AbsensiPage() {
   let classes = []
 
   if (role === "wali_kelas") {
-    // Fetch classes managed by this homeroom teacher
+    // Fetch classes managed by this teacher
     const { data: managedClasses } = await supabase
       .from("classes")
       .select("id, name, grade_level")
@@ -45,7 +44,6 @@ export default async function AbsensiPage() {
 
     if (classes.length > 0) {
       const classIds = classes.map((c) => c.id)
-      // Fetch students in those classes
       const { data: studentsList } = await supabase
         .from("students")
         .select("id, full_name, nisn, nis, class_id")
@@ -55,7 +53,7 @@ export default async function AbsensiPage() {
       students = studentsList || []
     }
   } else if (role === "orang_tua") {
-    // Fetch children linked to this parent
+    // Fetch children
     const { data: children } = await supabase
       .from("students")
       .select("id, full_name, nisn, nis, class_id")
@@ -82,17 +80,15 @@ export default async function AbsensiPage() {
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-foreground md:text-3xl">
-            Pencatatan Kehadiran
+            Laporan Rekap Absensi
           </h1>
           <p className="text-sm text-muted-foreground">
-            {role === "wali_kelas"
-              ? "Kelola absensi harian siswa di kelas Anda"
-              : "Pantau kehadiran harian anak Anda"}
+            Laporan persentase dan akumulasi kehadiran siswa
           </p>
         </div>
       </div>
 
-      <AttendanceLoggingClient
+      <AttendanceRekapClient
         role={role}
         students={students}
         classes={classes}
