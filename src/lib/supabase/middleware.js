@@ -28,9 +28,13 @@ export async function updateSession(request) {
   )
 
   // Retrieve user session and refresh token if necessary
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  let user = null
+  try {
+    const { data } = await supabase.auth.getUser()
+    user = data?.user || null
+  } catch (err) {
+    console.error('Middleware auth check error:', err)
+  }
 
   const isLoginPage = request.nextUrl.pathname.startsWith('/login')
   const isStaticOrAsset = 
