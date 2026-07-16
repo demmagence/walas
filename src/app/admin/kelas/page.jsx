@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-export default async function Home() {
+export default async function AdminKelasPage() {
   const supabase = await createClient()
 
   const {
@@ -12,26 +12,14 @@ export default async function Home() {
     redirect('/login')
   }
 
-  // Fetch user profile from the database to determine role
-  const { data: profile, error } = await supabase
+  const { data: profile } = await supabase
     .from('profiles')
     .select('role, full_name')
     .eq('id', user.id)
     .single()
 
-  if (error || !profile) {
-    // Session is invalid or profile not found, log out to be safe
-    await supabase.auth.signOut()
-    redirect('/login')
-  }
-
-  const { role, full_name } = profile
-
-  // Redirection rules:
-  // Admin -> /admin/kelas (or Admin home dashboard)
-  // Wali Kelas / Orang Tua -> / (render dashboard content here)
-  if (role === 'admin') {
-    redirect('/admin/kelas')
+  if (!profile || profile.role !== 'admin') {
+    redirect('/')
   }
 
   async function handleSignOut() {
@@ -45,7 +33,7 @@ export default async function Home() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 text-center">
       <div className="max-w-md space-y-6 rounded-lg border border-border bg-card p-8 shadow-lg">
         <div className="flex justify-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
             <svg
               className="h-6 w-6"
               fill="none"
@@ -57,22 +45,28 @@ export default async function Home() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
               />
             </svg>
           </div>
         </div>
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold text-foreground">Selamat Datang, {full_name || 'Pengguna'}!</h1>
+          <h1 className="text-2xl font-bold text-foreground">Halaman Dashboard Admin</h1>
           <p className="text-muted-foreground text-sm">
-            Anda masuk ke sistem sebagai <span className="font-semibold text-primary">{role === 'wali_kelas' ? 'Wali Kelas' : 'Orang Tua'}</span>.
+            Selamat datang, {profile.full_name || 'Admin'}! Anda masuk sebagai <span className="font-semibold text-accent">Administrator</span>.
           </p>
         </div>
         
         <div className="rounded-md bg-secondary p-4 text-left border border-border/50">
-          <h2 className="text-sm font-semibold text-secondary-foreground mb-1">Status Sistem:</h2>
+          <h2 className="text-sm font-semibold text-secondary-foreground mb-1">Status Panel Admin:</h2>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Infrastruktur autentikasi dan basis data telah aktif. Modul fungsionalitas absensi dan nilai kelas sedang disiapkan dalam pengembangan.
+            Infrastruktur autentikasi dan basis data telah aktif. Halaman administrasi data kelas dan mata pelajaran sedang disiapkan dalam pengembangan.
           </p>
         </div>
 
