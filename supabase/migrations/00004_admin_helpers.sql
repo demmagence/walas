@@ -18,7 +18,7 @@ SET search_path = ''
 AS $$
 BEGIN
   IF NOT EXISTS (
-    SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'
+    SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.role = 'admin'
   ) THEN
     RAISE EXCEPTION 'Akses ditolak: Hanya admin yang dapat mengambil daftar pengguna.';
   END IF;
