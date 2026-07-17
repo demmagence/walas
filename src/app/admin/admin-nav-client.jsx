@@ -65,7 +65,7 @@ export default function AdminNavClient() {
                 <Link
                   href={item.href}
                   className={cn(
-                    "relative flex flex-col items-center gap-0.5 rounded-xl px-3.5 py-1.5 text-[11px] font-medium transition-all duration-200",
+                    "relative flex flex-col items-center gap-0.5 rounded-xl px-1.5 min-[360px]:px-2.5 min-[400px]:px-3.5 py-1.5 text-[11px] font-medium transition-all duration-200",
                     active
                       ? "text-primary"
                       : "text-muted-foreground hover:text-foreground"
@@ -89,11 +89,11 @@ export default function AdminNavClient() {
                   </span>
                   <span
                     className={cn(
-                      "transition-all duration-200",
+                      "transition-all duration-200 text-[10px] min-[360px]:text-[11px] whitespace-nowrap",
                       active && "font-semibold"
                     )}
                   >
-                    {item.label}
+                    {item.label === "Tahun Ajaran" ? "T. Ajaran" : item.label}
                   </span>
                   {active && (
                     <span className="absolute -top-0 left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-full bg-accent" />
@@ -106,12 +106,12 @@ export default function AdminNavClient() {
           <li>
             <button
               onClick={handleClientSignOut}
-              className="flex flex-col items-center gap-0.5 rounded-xl px-3.5 py-1.5 text-[11px] font-medium text-destructive transition-all duration-200"
+              className="flex flex-col items-center gap-0.5 rounded-xl px-1.5 min-[360px]:px-2.5 min-[400px]:px-3.5 py-1.5 text-[11px] font-medium text-destructive transition-all duration-200"
             >
               <span className="flex items-center justify-center rounded-full p-1.5">
                 <LogOut className="h-5 w-5" />
               </span>
-              <span>Keluar</span>
+              <span className="text-[10px] min-[360px]:text-[11px] whitespace-nowrap">Keluar</span>
             </button>
           </li>
         </ul>
