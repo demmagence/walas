@@ -1,4 +1,4 @@
-import * as XLSX from 'xlsx'
+// Dynamic imports for xlsx inside functions to optimize bundle size
 
 // Columns layout structure for student import template
 export const IMPORT_COLUMNS = [
@@ -17,7 +17,8 @@ export const IMPORT_COLUMNS = [
  * Downloads a template Excel file for importing students into a specific class.
  * @param {string} className 
  */
-export function downloadImportTemplate(className) {
+export async function downloadImportTemplate(className) {
+  const XLSX = await import('xlsx')
   const headers = IMPORT_COLUMNS.map(col => col.header)
   const exampleRow = IMPORT_COLUMNS.reduce((acc, col) => {
     acc[col.header] = col.example
@@ -39,7 +40,8 @@ export function downloadImportTemplate(className) {
  * @param {File} file 
  * @returns {Promise<{data: Array, errors: Array}>}
  */
-export function parseImportExcel(file) {
+export async function parseImportExcel(file) {
+  const XLSX = await import('xlsx')
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
 
@@ -135,7 +137,8 @@ export function parseImportExcel(file) {
  * @param {Array} students 
  * @param {string} className 
  */
-export function exportStudentListToExcel(students, className) {
+export async function exportStudentListToExcel(students, className) {
+  const XLSX = await import('xlsx')
   const dataToExport = students.map((s, idx) => ({
     'No': idx + 1,
     'Nama Lengkap': s.full_name,
