@@ -6,6 +6,21 @@ export async function updateSession(request) {
     request,
   })
 
+  const isLoginPage = request.nextUrl.pathname.startsWith('/login')
+  const isStaticOrAsset = 
+    request.nextUrl.pathname.startsWith('/_next') || 
+    request.nextUrl.pathname.startsWith('/api') ||
+    request.nextUrl.pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico|css|js)$/)
+
+  const isPrefetch = 
+    request.headers.get('next-router-prefetch') || 
+    request.headers.get('purpose') === 'prefetch'
+
+  // Skip middleware auth checks for static assets, API routes, and Next.js prefetch requests
+  if (isStaticOrAsset || isPrefetch) {
+    return supabaseResponse
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -34,17 +49,6 @@ export async function updateSession(request) {
     user = data?.user || null
   } catch (err) {
     console.error('Middleware auth check error:', err)
-  }
-
-  const isLoginPage = request.nextUrl.pathname.startsWith('/login')
-  const isStaticOrAsset = 
-    request.nextUrl.pathname.startsWith('/_next') || 
-    request.nextUrl.pathname.startsWith('/api') ||
-    request.nextUrl.pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico|css|js)$/)
-
-  // Skip middleware checks for static assets and API routes
-  if (isStaticOrAsset) {
-    return supabaseResponse
   }
 
   if (!user && !isLoginPage) {

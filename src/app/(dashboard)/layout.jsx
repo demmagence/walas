@@ -18,20 +18,16 @@ export default async function DashboardLayout({ children }) {
     redirect("/login")
   }
 
-  // Verify profile exists
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single()
+  // Read role from JWT metadata for optimal performance (eliminates sequential DB query)
+  const role = user.user_metadata?.role
 
-  if (!profile) {
+  if (!role) {
     await supabase.auth.signOut()
     redirect("/login")
   }
 
   // Admin should not use the dashboard layout
-  if (profile.role === "admin") {
+  if (role === "admin") {
     redirect("/admin/kelas")
   }
 
