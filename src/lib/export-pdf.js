@@ -1,5 +1,3 @@
-import { jsPDF } from "jspdf"
-import "jspdf-autotable"
 
 /**
  * Formats a date into a localized Indonesian date string.
@@ -81,7 +79,10 @@ function drawSignatureSection(doc, startY, teacherName = "Wali Kelas", includePa
 /**
  * Exports the Student Grade Report (Rapor) to PDF.
  */
-export function exportStudentRaporPDF({ student, grades }) {
+export async function exportStudentRaporPDF({ student, grades }) {
+  const { jsPDF } = await import("jspdf")
+  await import("jspdf-autotable")
+
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",
@@ -178,10 +179,10 @@ export function exportStudentRaporPDF({ student, grades }) {
   doc.save(`Rapor_${student.full_name.replace(/\s+/g, "_")}.pdf`)
 }
 
-/**
- * Exports the Attendance Recap report to PDF.
- */
-export function exportAttendanceRekapPDF({ className, startDate, endDate, students, aggregates }) {
+export async function exportAttendanceRekapPDF({ className, startDate, endDate, students, aggregates }) {
+  const { jsPDF } = await import("jspdf")
+  await import("jspdf-autotable")
+
   const doc = new jsPDF({
     orientation: "portrait",
     unit: "mm",

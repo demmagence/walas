@@ -9,7 +9,6 @@ import {
   TrendingUp,
   Award
 } from 'lucide-react'
-import * as XLSX from 'xlsx'
 
 export default function GradesRekapClient({ className, students, subjects, grades, semester, academicYearName }) {
   const router = useRouter()
@@ -72,7 +71,8 @@ export default function GradesRekapClient({ className, students, subjects, grade
     : '—'
 
   // Excel exporter
-  const handleExportExcel = () => {
+  const handleExportExcel = async () => {
+    const XLSX = await import('xlsx')
     // 1. Prepare worksheet metadata header
     const metadata = [
       ['LAPORAN REKAPITULASI NILAI AKADEMIK'],
