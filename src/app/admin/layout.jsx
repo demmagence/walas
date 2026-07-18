@@ -20,14 +20,11 @@ export default async function AdminLayout({ children }) {
     redirect("/login")
   }
 
-  // Fetch user role
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role, full_name")
-    .eq("id", user.id)
-    .single()
+  // Read role and full name from JWT metadata for optimal performance (eliminates sequential DB query)
+  const role = user.user_metadata?.role
+  const fullName = user.user_metadata?.full_name
 
-  if (!profile || profile.role !== "admin") {
+  if (role !== "admin") {
     redirect("/")
   }
 
@@ -54,7 +51,7 @@ export default async function AdminLayout({ children }) {
             </div>
             <div className="flex items-center gap-4">
               <span className="text-sm text-muted-foreground">
-                Halo, <span className="font-semibold text-foreground">{profile.full_name || "Admin"}</span>
+                Halo, <span className="font-semibold text-foreground">{fullName || "Admin"}</span>
               </span>
               <form action={handleSignOut}>
                 <button
