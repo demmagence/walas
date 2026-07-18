@@ -100,9 +100,6 @@ export default function DashboardNav() {
                   >
                     {item.label}
                   </span>
-                  {active && (
-                    <span className="absolute -top-0 left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-full bg-accent" />
-                  )}
                 </Link>
               </li>
             )
