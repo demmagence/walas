@@ -154,9 +154,6 @@ export default function DashboardNav() {
                       strokeWidth={active ? 2.5 : 2}
                     />
                     <span>{item.label}</span>
-                    {active && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-accent shadow-sm" />
-                    )}
                   </Link>
                 </li>
               )
