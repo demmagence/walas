@@ -140,7 +140,6 @@ export async function saveGradesAction(grades, subjectId, semester, academicYear
 
     // 5. Build upsert payloads
     const payloads = grades.map(g => ({
-      id: g.id || undefined, // undefined will let Supabase insert a new row if it doesn't exist
       student_id: g.student_id,
       subject_id: subjectId,
       semester: Number(semester),

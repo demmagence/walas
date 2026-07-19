@@ -128,7 +128,6 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
       const recordsToUpsert = filteredStudents.map((student) => {
         const state = attendanceMap[student.id]
         return {
-          id: state?.id || undefined, // undefined let's Supabase handle primary key generation if new
           student_id: student.id,
           date: date,
           status: state?.status || "hadir",
