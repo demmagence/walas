@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import {
@@ -119,8 +120,14 @@ export default function DashboardNav() {
       >
         {/* Logo / Brand */}
         <div className="flex items-center gap-3 px-6 py-5 border-b border-sidebar-border">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-            <GraduationCap className="h-5 w-5" />
+          <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-background border shadow-sm">
+            <Image
+              src="/images/walas.png"
+              alt="Logo Walas"
+              width={36}
+              height={36}
+              className="object-cover"
+            />
           </div>
           <div>
             <h1 className="text-base font-bold text-sidebar-foreground tracking-tight">
