@@ -40,7 +40,7 @@ export default function LoginPage() {
   }
 
   return (
-    <Card className="border-none shadow-none ring-0">
+    <Card className="bg-muted/40 border-none shadow-none ring-0">
       <CardHeader className="space-y-1 text-center">
         <div className="flex justify-center mb-2">
           <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border bg-background shadow-sm">
@@ -78,7 +78,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="bg-background focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
           <div className="space-y-2">
@@ -94,11 +94,11 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="bg-background focus:ring-2 focus:ring-primary focus:border-transparent"
             />
           </div>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
+        <CardFooter className="flex flex-col space-y-4 bg-transparent border-t-0">
           <Button
             type="submit"
             className="w-full bg-primary hover:bg-primary/95 text-primary-foreground font-semibold shadow-md active:scale-[0.98] transition-transform duration-75"
