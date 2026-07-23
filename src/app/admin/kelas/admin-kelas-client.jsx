@@ -441,9 +441,9 @@ export default function AdminKelasClient({ initialClasses, departments, academic
                 name="homeroom_teacher"
                 value={formData.homeroom_teacher}
                 onChange={handleInputChange}
-                className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
+                className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none cursor-pointer"
               >
-                <option value="">-- Pilih Wali Kelas --</option>
+                <option value="">Pilih Wali Kelas</option>
                 {teachers.map((t) => (
                   <option key={t.id} value={t.id}>
                     {t.full_name}

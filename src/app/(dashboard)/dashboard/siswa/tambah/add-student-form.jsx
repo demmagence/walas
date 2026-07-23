@@ -222,7 +222,7 @@ export default function AddStudentForm({ classes, parents }) {
             onChange={handleChange}
             className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none cursor-pointer"
           >
-            <option value="">-- Pilih Agama --</option>
+            <option value="">Pilih Agama</option>
             <option value="Islam">Islam</option>
             <option value="Kristen">Kristen</option>
             <option value="Katolik">Katolik</option>
@@ -255,9 +255,9 @@ export default function AddStudentForm({ classes, parents }) {
             name="parent_user_id"
             value={formData.parent_user_id}
             onChange={handleChange}
-            className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
+            className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none cursor-pointer"
           >
-            <option value="">-- Pilih Orang Tua / Wali --</option>
+            <option value="">Pilih Orang Tua / Wali</option>
             {parents.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.full_name}
