@@ -139,7 +139,7 @@ export default async function BerandaPage() {
           <>
             {/* Quick Stats Cards */}
             <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-              <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+              <div className="rounded-xl bg-card p-5">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-muted-foreground uppercase">Total Siswa</span>
                   <Users className="h-5 w-5 text-primary" />
@@ -148,7 +148,7 @@ export default async function BerandaPage() {
                 <p className="text-[10px] text-muted-foreground mt-1 truncate">Tahun Ajaran: {academicYearName}</p>
               </div>
 
-              <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+              <div className="rounded-xl bg-card p-5">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-muted-foreground uppercase">Hadir Hari Ini</span>
                   <CheckCircle className="h-5 w-5 text-primary" />
@@ -157,7 +157,7 @@ export default async function BerandaPage() {
                 <p className="text-[10px] text-muted-foreground mt-1">S: {attendanceToday.sakit} | I: {attendanceToday.izin} | A: {attendanceToday.alpha}</p>
               </div>
 
-              <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+              <div className="rounded-xl bg-card p-5">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-muted-foreground uppercase">Rata-rata Nilai</span>
                   <TrendingUp className="h-5 w-5 text-accent" />
@@ -166,7 +166,7 @@ export default async function BerandaPage() {
                 <p className="text-[10px] text-muted-foreground mt-1">Akumulasi semua mapel</p>
               </div>
 
-              <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+              <div className="rounded-xl bg-card p-5">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-muted-foreground uppercase">Tingkat / Kelas</span>
                   <School className="h-5 w-5 text-accent" />
@@ -182,7 +182,7 @@ export default async function BerandaPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <Link
                   href="/dashboard/absensi"
-                  className="group flex items-center justify-between rounded-xl border border-border bg-card p-5 shadow-sm hover:border-primary/40 transition-all"
+                  className="group flex items-center justify-between rounded-xl bg-card p-5 transition-all"
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -198,7 +198,7 @@ export default async function BerandaPage() {
 
                 <Link
                   href="/dashboard/siswa"
-                  className="group flex items-center justify-between rounded-xl border border-border bg-card p-5 shadow-sm hover:border-accent/40 transition-all"
+                  className="group flex items-center justify-between rounded-xl bg-card p-5 transition-all"
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent">
@@ -215,11 +215,11 @@ export default async function BerandaPage() {
             </div>
           </>
         ) : (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card p-8 py-16 text-center">
+          <div className="flex flex-col items-center justify-center rounded-xl bg-card p-8 py-16 text-center">
             <AlertCircle className="h-10 w-10 text-muted-foreground mb-4" />
             <h2 className="text-lg font-bold text-foreground">Kelas Belum Ditugaskan</h2>
-            <p className="mt-1 max-w-sm text-sm text-muted-foreground leading-relaxed">
-              Akun Anda belum terdaftar sebagai wali kelas aktif pada semester ini. Silakan hubungi Administrator untuk memperbarui kelas binaan Anda.
+            <p className="text-sm text-muted-foreground max-w-sm mt-1">
+              Akun Anda belum dikaitkan dengan kelas manapun untuk tahun ajaran aktif ini. Silakan hubungi Administrator sekolah.
             </p>
           </div>
         )}
@@ -316,9 +316,9 @@ export default async function BerandaPage() {
             <h2 className="text-lg font-bold text-foreground">Pemantauan Akademik Anak</h2>
             <div className="grid gap-6 md:grid-cols-2">
               {childrenData.map((child) => (
-                <div key={child.id} className="rounded-xl border border-border bg-card p-6 shadow-sm space-y-6">
+                <div key={child.id} className="rounded-xl bg-card p-6 space-y-6">
                   {/* Child header */}
-                  <div className="border-b border-border/50 pb-4">
+                  <div className="pb-4">
                     <h3 className="text-lg font-bold text-foreground">{child.full_name}</h3>
                     <p className="text-xs text-muted-foreground mt-0.5">NISN: {child.nisn || "—"} | NIS: {child.nis || "—"}</p>
                     <div className="flex gap-2 mt-2">
@@ -333,7 +333,7 @@ export default async function BerandaPage() {
 
                   {/* Child Metrics Grid */}
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="rounded-lg bg-secondary p-4 text-center border border-border/50">
+                    <div className="rounded-lg bg-secondary p-4 text-center">
                       <div className="flex justify-center mb-1 text-primary">
                         <Calendar className="h-4 w-4" />
                       </div>
@@ -341,7 +341,7 @@ export default async function BerandaPage() {
                       <p className="mt-1 text-2xl font-bold text-foreground">{child.attendancePercentage}%</p>
                     </div>
 
-                    <div className="rounded-lg bg-secondary p-4 text-center border border-border/50">
+                    <div className="rounded-lg bg-secondary p-4 text-center">
                       <div className="flex justify-center mb-1 text-accent">
                         <GraduationCap className="h-4 w-4" />
                       </div>

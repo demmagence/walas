@@ -43,7 +43,7 @@ export default function LoginPage() {
     <Card className="bg-muted/40 border-none shadow-none ring-0">
       <CardHeader className="space-y-1 text-center">
         <div className="flex justify-center mb-2">
-          <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border bg-background shadow-sm">
+          <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-background">
             <Image
               src="/images/walas.png"
               alt="Logo Walas"
@@ -63,7 +63,7 @@ export default function LoginPage() {
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           {error && (
-            <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive font-medium border border-destructive/20">
+            <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive font-medium">
               {error}
             </div>
           )}
@@ -101,7 +101,7 @@ export default function LoginPage() {
         <CardFooter className="flex flex-col space-y-4 bg-transparent border-t-0">
           <Button
             type="submit"
-            className="w-full bg-primary hover:bg-primary/95 text-primary-foreground font-semibold shadow-md active:scale-[0.98] transition-transform duration-75"
+            className="w-full bg-primary hover:bg-primary/95 text-primary-foreground font-semibold active:scale-[0.98] transition-transform duration-75"
             disabled={loading}
           >
             {loading ? 'Memuat...' : 'Masuk'}

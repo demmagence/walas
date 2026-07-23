@@ -202,7 +202,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
 
       {/* Success Alert */}
       {successMessage && (
-        <div className="flex items-center gap-2.5 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-600 dark:text-emerald-400">
+        <div className="flex items-center gap-2.5 rounded-xl bg-emerald-500/10 p-4 text-sm text-emerald-600 dark:text-emerald-400">
           <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
           <span>{successMessage}</span>
         </div>
@@ -210,7 +210,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
 
       {/* Classes Roster List */}
       {filteredClasses.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card/50 px-6 py-12 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-card/50 px-6 py-12 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent mb-3">
             <School className="h-6 w-6" />
           </div>
@@ -224,9 +224,9 @@ export default function AdminKelasClient({ initialClasses, departments, academic
       ) : (
         <>
           {/* Desktop Table View */}
-          <div className="hidden md:block overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-            <table className="w-full border-collapse text-left text-sm">
-              <thead className="bg-muted text-muted-foreground font-semibold border-b border-border">
+          <div className="hidden md:block overflow-hidden rounded-xl bg-card">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-muted text-muted-foreground font-semibold">
                 <tr>
                   <th className="px-6 py-3.5">Nama Kelas</th>
                   <th className="px-6 py-3.5">Tingkat</th>
@@ -236,7 +236,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
                   <th className="px-6 py-3.5 text-right">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody>
                 {filteredClasses.map((cls) => (
                   <tr key={cls.id} className="hover:bg-muted/10">
                     <td className="px-6 py-4 font-bold text-foreground">
@@ -292,7 +292,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
           {/* Mobile Card List */}
           <div className="grid grid-cols-1 gap-3 md:hidden">
             {filteredClasses.map((cls) => (
-              <div key={cls.id} className="rounded-xl border border-border bg-card p-4 shadow-sm space-y-3">
+              <div key={cls.id} className="rounded-xl bg-card p-4 space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
                     <h4 className="font-bold text-foreground">Kelas {cls.name}</h4>
@@ -305,7 +305,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
                   </span>
                 </div>
 
-                <div className="py-2 border-t border-b border-border/50 text-xs text-muted-foreground">
+                <div className="py-2 text-xs text-muted-foreground">
                   <span className="block text-[9px] uppercase tracking-wider text-muted-foreground/60 mb-0.5">Wali Kelas</span>
                   <span className="font-semibold text-foreground">
                     {cls.profiles?.full_name || <span className="text-destructive">Belum ditugaskan</span>}
@@ -341,9 +341,9 @@ export default function AdminKelasClient({ initialClasses, departments, academic
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-4">
           <form
             onSubmit={handleSubmit}
-            className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl animate-in fade-in zoom-in duration-200 space-y-4"
+            className="w-full max-w-md rounded-2xl bg-card p-6 animate-in fade-in zoom-in duration-200 space-y-4"
           >
-            <div className="flex items-center justify-between border-b border-border pb-3">
+            <div className="flex items-center justify-between pb-3">
               <h3 className="text-lg font-bold text-foreground">
                 {editingClass ? "Edit Informasi Kelas" : "Daftarkan Kelas Baru"}
               </h3>
@@ -357,7 +357,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive">
+              <div className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-xs text-destructive">
                 <AlertTriangle className="h-4 w-4 flex-shrink-0" />
                 <span>{error}</span>
               </div>
@@ -387,7 +387,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
                 required
                 value={formData.grade_level}
                 onChange={handleInputChange}
-                className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-card"
+                className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
               >
                 <option value={10}>Tingkat 10 (Sepuluh)</option>
                 <option value={11}>Tingkat 11 (Sebelas)</option>
@@ -404,7 +404,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
                 required
                 value={formData.department_id}
                 onChange={handleInputChange}
-                className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-card"
+                className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
               >
                 {departments.map((d) => (
                   <option key={d.id} value={d.id}>
@@ -423,7 +423,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
                 required
                 value={formData.academic_year_id}
                 onChange={handleInputChange}
-                className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-card"
+                className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
               >
                 {academicYears.map((y) => (
                   <option key={y.id} value={y.id}>
@@ -441,7 +441,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
                 name="homeroom_teacher"
                 value={formData.homeroom_teacher}
                 onChange={handleInputChange}
-                className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-card"
+                className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
               >
                 <option value="">-- Pilih Wali Kelas --</option>
                 {teachers.map((t) => (
@@ -453,7 +453,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
+            <div className="flex items-center justify-end gap-3 pt-3">
               <Button
                 type="button"
                 variant="outline"
@@ -466,7 +466,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
               <Button
                 type="submit"
                 disabled={loading}
-                className="h-10 px-4 rounded-xl gap-2 font-semibold bg-accent hover:bg-accent/90 text-accent-foreground shadow-sm"
+                className="h-10 px-4 rounded-xl gap-2 font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
               >
                 <Save className="h-4 w-4" />
                 <span>{loading ? "Menyimpan..." : "Simpan Kelas"}</span>
@@ -479,7 +479,7 @@ export default function AdminKelasClient({ initialClasses, departments, academic
       {/* Delete Confirmation Modal */}
       {deletingId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-4">
-          <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-xl animate-in fade-in zoom-in duration-200">
+          <div className="w-full max-w-sm rounded-2xl bg-card p-6 animate-in fade-in zoom-in duration-200">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive mb-4">
               <AlertTriangle className="h-6 w-6" />
             </div>

@@ -186,22 +186,20 @@ export default function ImportClient({ classes }) {
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-3">
-          {/* Settings and Instruction Column */}
           <div className="md:col-span-1 space-y-6">
-            <div className="rounded-2xl border border-border bg-card p-5 shadow-sm space-y-4">
+            <div className="rounded-2xl bg-card p-5 space-y-4">
               <h3 className="font-bold text-foreground text-sm uppercase tracking-wider">Konfigurasi Impor</h3>
               
-              {/* Select target class */}
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-muted-foreground">Kelas Tujuan</label>
                 <select
                   value={selectedClassId}
                   onChange={(e) => {
                     setSelectedClassId(e.target.value)
-                    handleReset() // Reset file if target class changes
+                    handleReset()
                   }}
                   disabled={loading || file !== null}
-                  className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+                  className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
                 >
                   {classes.map((cls) => (
                     <option key={cls.id} value={cls.id}>
@@ -211,15 +209,14 @@ export default function ImportClient({ classes }) {
                 </select>
               </div>
 
-              {/* Template Download Option */}
-              <div className="pt-2 border-t border-border/50">
+              <div className="pt-2">
                 <p className="text-xs text-muted-foreground leading-relaxed mb-3">
                   Pastikan kolom dan header data Excel sesuai dengan template yang ditentukan. Unduh template di bawah:
                 </p>
                 <Button
                   onClick={handleDownloadTemplate}
                   variant="outline"
-                  className="w-full rounded-xl gap-2 font-semibold text-xs h-9 text-primary hover:text-primary-foreground hover:bg-primary border-primary/40"
+                  className="w-full rounded-xl gap-2 font-semibold text-xs h-9 text-primary hover:text-primary-foreground hover:bg-primary"
                 >
                   <Download className="h-3.5 w-3.5" />
                   Unduh Template Excel
@@ -227,8 +224,7 @@ export default function ImportClient({ classes }) {
               </div>
             </div>
 
-            {/* Formatting Guidance */}
-            <div className="rounded-2xl border border-border/50 bg-secondary p-5 space-y-3">
+            <div className="rounded-2xl bg-secondary p-5 space-y-3">
               <div className="flex items-center gap-2 text-foreground font-semibold text-xs uppercase tracking-wider">
                 <HelpCircle className="h-4 w-4 text-primary" />
                 Pedoman Format
@@ -243,11 +239,9 @@ export default function ImportClient({ classes }) {
             </div>
           </div>
 
-          {/* Upload and Preview Column */}
           <div className="md:col-span-2 space-y-6">
-            {/* Status Messages */}
             {error && (
-              <div className="flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+              <div className="flex items-start gap-3 rounded-xl bg-destructive/10 p-4 text-sm text-destructive">
                 <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <p className="font-semibold">Gagal Mengimpor</p>
@@ -257,7 +251,7 @@ export default function ImportClient({ classes }) {
             )}
 
             {success && (
-              <div className="flex items-start gap-3 rounded-xl border border-primary/30 bg-primary/10 p-4 text-sm text-primary">
+              <div className="flex items-start gap-3 rounded-xl bg-primary/10 p-4 text-sm text-primary">
                 <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <p className="font-semibold">Impor Berhasil</p>
@@ -266,7 +260,6 @@ export default function ImportClient({ classes }) {
               </div>
             )}
 
-            {/* Drag & Drop Area */}
             {!file ? (
               <div
                 onDragEnter={handleDrag}
@@ -274,10 +267,10 @@ export default function ImportClient({ classes }) {
                 onDragLeave={handleDrag}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 py-16 text-center cursor-pointer transition-all ${
+                className={`relative flex flex-col items-center justify-center rounded-2xl p-10 py-16 text-center cursor-pointer transition-all ${
                   dragActive 
-                    ? 'border-primary bg-primary/5' 
-                    : 'border-border bg-card hover:border-primary/50'
+                    ? 'bg-primary/5' 
+                    : 'bg-card hover:bg-muted/30'
                 }`}
               >
                 <input
@@ -301,9 +294,8 @@ export default function ImportClient({ classes }) {
                 <span className="mt-3 text-[10px] text-muted-foreground/60">Hanya format .xlsx atau .xls yang didukung.</span>
               </div>
             ) : (
-              /* Selected file summary card */
-              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm space-y-4">
-                <div className="flex items-center justify-between border-b border-border/50 pb-4">
+              <div className="rounded-2xl bg-card p-5 space-y-4">
+                <div className="flex items-center justify-between pb-4">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600">
                       <FileSpreadsheet className="h-5 w-5" />
@@ -323,44 +315,26 @@ export default function ImportClient({ classes }) {
                     onClick={handleReset}
                     disabled={loading}
                     className="h-8 w-8 text-muted-foreground hover:text-destructive rounded-lg"
-                    title="Ganti Berkas"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <X className="h-4 w-4" />
                   </Button>
                 </div>
 
-                {/* Validation summary bar */}
-                <div className="flex flex-wrap gap-4 text-xs">
-                  <div className="flex items-center gap-1.5 text-emerald-600 font-semibold">
-                    <CheckCircle2 className="h-4 w-4" />
-                    {parsedStudents.filter(s => s.isValid).length} Baris Valid
-                  </div>
-                  {hasErrors && (
-                    <div className="flex items-center gap-1.5 text-destructive font-semibold">
-                      <AlertCircle className="h-4 w-4" />
-                      {parsedStudents.filter(s => !s.isValid).length} Baris Bermasalah
-                    </div>
-                  )}
-                </div>
-
-                {/* Preview Table */}
                 {parsedStudents.length > 0 && (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <h5 className="text-xs font-bold text-foreground uppercase tracking-wider">Pratinjau Data Siswa</h5>
-                    </div>
-                    <div className="overflow-x-auto rounded-xl border border-border max-h-72 overflow-y-auto">
-                      <table className="w-full border-collapse text-left text-xs">
-                        <thead className="bg-muted text-muted-foreground font-semibold border-b border-border sticky top-0">
+                  <div className="space-y-2">
+                    <h5 className="text-xs font-bold text-foreground uppercase tracking-wider">Pratinjau Data</h5>
+                    <div className="max-h-60 overflow-y-auto rounded-xl bg-card">
+                      <table className="w-full text-left text-xs">
+                        <thead className="bg-muted text-muted-foreground font-semibold">
                           <tr>
-                            <th className="px-4 py-2">Baris</th>
-                            <th className="px-4 py-2">Nama Lengkap</th>
+                            <th className="px-4 py-2">No</th>
+                            <th className="px-4 py-2">Nama</th>
                             <th className="px-4 py-2">NISN / NIS</th>
                             <th className="px-4 py-2">Gender</th>
                             <th className="px-4 py-2">Status</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-border">
+                        <tbody>
                           {parsedStudents.map((student, idx) => (
                             <tr key={idx} className="hover:bg-muted/30">
                               <td className="px-4 py-2 font-mono text-muted-foreground">
@@ -392,9 +366,8 @@ export default function ImportClient({ classes }) {
                   </div>
                 )}
 
-                {/* Validation errors detail */}
                 {hasErrors && (
-                  <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-4 space-y-2">
+                  <div className="rounded-xl bg-destructive/5 p-4 space-y-2">
                     <div className="flex items-center gap-2 text-destructive font-bold text-xs">
                       <AlertCircle className="h-4 w-4" />
                       Detail Kesalahan Validasi File:
@@ -412,8 +385,7 @@ export default function ImportClient({ classes }) {
                   </div>
                 )}
 
-                {/* Import Submission Control */}
-                <div className="pt-4 border-t border-border/50 flex items-center justify-end gap-3">
+                <div className="pt-4 flex items-center justify-end gap-3">
                   <Button
                     type="button"
                     variant="outline"
@@ -427,7 +399,7 @@ export default function ImportClient({ classes }) {
                     type="button"
                     onClick={handleImportSubmit}
                     disabled={loading || hasErrors}
-                    className="rounded-xl h-10 px-5 gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm"
+                    className="rounded-xl h-10 px-5 gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground"
                   >
                     {loading ? (
                       <>

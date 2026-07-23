@@ -182,7 +182,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
         <div className="space-y-6">
           {/* Main Averages Overview cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
-            <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+            <div className="rounded-xl bg-card p-5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-muted-foreground uppercase">Rata-rata Nilai Kelas</span>
                 <TrendingUp className="h-5 w-5 text-primary" />
@@ -190,7 +190,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
               <p className="mt-2 text-3xl font-extrabold text-foreground">{classGeneralAverage}</p>
               <p className="text-[10px] text-muted-foreground mt-1">Akumulasi seluruh siswa & mapel</p>
             </div>
-            <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+            <div className="rounded-xl bg-card p-5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-muted-foreground uppercase">Mata Pelajaran Aktif</span>
                 <Award className="h-5 w-5 text-accent" />
@@ -201,10 +201,10 @@ export default function GradesRekapClient({ className, students, subjects, grade
           </div>
 
           {/* Matrix Report Table - Desktop */}
-          <div className="hidden md:block overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+          <div className="hidden md:block overflow-hidden rounded-xl bg-card">
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-left text-sm min-w-[800px]">
-                <thead className="bg-muted text-muted-foreground font-semibold border-b border-border">
+              <table className="w-full text-left text-sm min-w-[800px]">
+                <thead className="bg-muted text-muted-foreground font-semibold">
                   <tr>
                     <th className="px-4 py-3">Nama Lengkap</th>
                     <th className="px-4 py-3">NISN</th>
@@ -213,12 +213,12 @@ export default function GradesRekapClient({ className, students, subjects, grade
                         {sub.name}
                       </th>
                     ))}
-                    <th className="px-4 py-3 text-right font-bold text-foreground border-l border-border bg-muted/60">
+                    <th className="px-4 py-3 text-right font-bold text-foreground bg-muted/60">
                       Rata-rata
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">
+                <tbody>
                   {/* Student Rows */}
                   {gradesMatrix.map((m) => (
                     <tr key={m.id} className="hover:bg-muted/10">
@@ -242,14 +242,14 @@ export default function GradesRekapClient({ className, students, subjects, grade
                           </td>
                         )
                       })}
-                      <td className="px-4 py-3.5 text-right font-extrabold text-foreground border-l border-border bg-muted/30">
+                      <td className="px-4 py-3.5 text-right font-extrabold text-foreground bg-muted/30">
                         {m.average}
                       </td>
                     </tr>
                   ))}
 
                   {/* Summary/Subject Averages Footer Row */}
-                  <tr className="bg-muted/40 font-bold border-t border-border">
+                  <tr className="bg-muted/40 font-bold">
                     <td colSpan={2} className="px-4 py-3.5 text-foreground text-xs uppercase tracking-wider">
                       Rata-rata Kelas
                     </td>
@@ -261,7 +261,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
                         </td>
                       )
                     })}
-                    <td className="px-4 py-3.5 text-right font-extrabold text-accent border-l border-border bg-muted/60">
+                    <td className="px-4 py-3.5 text-right font-extrabold text-accent bg-muted/60">
                       {classGeneralAverage}
                     </td>
                   </tr>
@@ -273,7 +273,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
           {/* Matrix Report Cards - Mobile */}
           <div className="grid grid-cols-1 gap-3 md:hidden">
             {gradesMatrix.map((m) => (
-              <div key={m.id} className="rounded-xl border border-border bg-card p-4 shadow-sm space-y-3">
+              <div key={m.id} className="rounded-xl bg-card p-4 space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
                     <h4 className="font-bold text-foreground">{m.full_name}</h4>
