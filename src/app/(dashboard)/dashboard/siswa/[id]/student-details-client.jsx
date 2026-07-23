@@ -52,6 +52,19 @@ export default function StudentDetailsClient({ role, student, attendances, grade
     }
   }
 
+  const [isExporting, setIsExporting] = useState(false)
+
+  const handleExportPDF = async () => {
+    try {
+      setIsExporting(true)
+      await exportStudentRaporPDF({ student, grades })
+    } catch (err) {
+      console.error("Gagal mengekspor PDF Rapor:", err)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Top Bar Navigation */}
@@ -69,11 +82,11 @@ export default function StudentDetailsClient({ role, student, attendances, grade
           <Button
             variant="outline"
             className="rounded-xl h-10 px-3.5 gap-2 font-semibold text-primary hover:bg-primary/5"
-            onClick={() => exportStudentRaporPDF({ student, grades })}
-            disabled={grades.length === 0}
+            onClick={handleExportPDF}
+            disabled={grades.length === 0 || isExporting}
           >
             <FileText className="h-4 w-4" />
-            <span>Ekspor PDF (Rapor)</span>
+            <span>{isExporting ? "Mengunduh PDF..." : "Ekspor PDF (Rapor)"}</span>
           </Button>
 
           {isWaliKelas && (

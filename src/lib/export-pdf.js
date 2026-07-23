@@ -81,7 +81,8 @@ function drawSignatureSection(doc, startY, teacherName = "Wali Kelas", includePa
  */
 export async function exportStudentRaporPDF({ student, grades }) {
   const { jsPDF } = await import("jspdf")
-  await import("jspdf-autotable")
+  const autoTableModule = await import("jspdf-autotable")
+  const autoTable = autoTableModule.default || autoTableModule
 
   const doc = new jsPDF({
     orientation: "portrait",
@@ -128,7 +129,7 @@ export async function exportStudentRaporPDF({ student, grades }) {
     ]
   })
 
-  doc.autoTable({
+  autoTable(doc, {
     startY: currentY,
     head: [["No", "Mata Pelajaran", "Nilai", "Predikat", "Keterangan Kelulusan"]],
     body: tableData,
@@ -167,7 +168,6 @@ export async function exportStudentRaporPDF({ student, grades }) {
 
   // 5. Signatures
   currentY += 15
-  // Prevent overflow to next page for signatures if close to bottom
   if (currentY > 240) {
     doc.addPage()
     currentY = 25
@@ -181,7 +181,8 @@ export async function exportStudentRaporPDF({ student, grades }) {
 
 export async function exportAttendanceRekapPDF({ className, startDate, endDate, students, aggregates }) {
   const { jsPDF } = await import("jspdf")
-  await import("jspdf-autotable")
+  const autoTableModule = await import("jspdf-autotable")
+  const autoTable = autoTableModule.default || autoTableModule
 
   const doc = new jsPDF({
     orientation: "portrait",
@@ -223,7 +224,7 @@ export async function exportAttendanceRekapPDF({ className, startDate, endDate, 
     ]
   })
 
-  doc.autoTable({
+  autoTable(doc, {
     startY: currentY,
     head: [["No", "Nama Lengkap", "NISN", "H", "S", "I", "A", "Total", "Persentase H"]],
     body: tableData,
@@ -264,4 +265,108 @@ export async function exportAttendanceRekapPDF({ className, startDate, endDate, 
   drawSignatureSection(doc, currentY, "Wali Kelas", false)
 
   doc.save(`Rekap_Kehadiran_Kelas_${className.replace(/\s+/g, "_")}.pdf`)
+}
+
+export async function exportClassRaporRekapPDF({ className, academicYearName, semester, students, subjects, matrix }) {
+  const { jsPDF } = await import("jspdf")
+  const autoTableModule = await import("jspdf-autotable")
+  const autoTable = autoTableModule.default || autoTableModule
+
+  const doc = new jsPDF({
+    orientation: "landscape",
+    unit: "mm",
+    format: "a4"
+  })
+
+  // 1. Kop Surat
+  doc.setFont("helvetica", "bold")
+  doc.setFontSize(14)
+  doc.text("PEMERINTAH PROVINSI DAERAH KHUSUS IBUKOTA JAKARTA", 148, 15, { align: "center" })
+  doc.setFontSize(12)
+  doc.text("SEKOLAH MENENGAH KEJURUAN (SMK) WALAS", 148, 21, { align: "center" })
+  doc.setFont("helvetica", "normal")
+  doc.setFontSize(9)
+  doc.text("Jl. Pendidikan Raya No. 45, Jakarta Timur • Telp: (021) 87654321 • Email: info@smkwalas.sch.id", 148, 26, { align: "center" })
+  
+  doc.setLineWidth(1)
+  doc.line(15, 29, 282, 29)
+  doc.setLineWidth(0.5)
+  doc.line(15, 30.5, 282, 30.5)
+
+  let currentY = 37
+
+  // 2. Title
+  doc.setFont("helvetica", "bold")
+  doc.setFontSize(12)
+  doc.text("REKAPITULASI NILAI RAPOR KELAS", 148, currentY, { align: "center" })
+  currentY += 8
+
+  // 3. Details
+  doc.setFont("helvetica", "normal")
+  doc.setFontSize(10)
+  doc.text(`Kelas          :  Kelas ${className}`, 15, currentY)
+  doc.text(`Tahun Ajaran  :  ${academicYearName} | Semester ${semester}`, 15, currentY + 5)
+  currentY += 12
+
+  // 4. Matrix Table
+  const tableHead = [
+    ["No", "Nama Siswa", "NISN", ...subjects.map(s => s.name), "Rata-Rata", "Status"]
+  ]
+
+  const tableBody = matrix.map((m, idx) => {
+    const subjectScores = subjects.map(s => m.scores[s.id] !== undefined ? m.scores[s.id] : "-")
+    const status = parseFloat(m.average) >= 75 ? "TUNTAS" : "BELUM TUNTAS"
+    return [
+      idx + 1,
+      m.student.full_name,
+      m.student.nisn || "-",
+      ...subjectScores,
+      m.average,
+      status
+    ]
+  })
+
+  autoTable(doc, {
+    startY: currentY,
+    head: tableHead,
+    body: tableBody,
+    theme: "striped",
+    headStyles: {
+      fillColor: [16, 185, 129],
+      textColor: [255, 255, 255],
+      fontStyle: "bold",
+      halign: "center"
+    },
+    styles: {
+      fontSize: 8,
+      cellPadding: 2,
+      halign: "center"
+    },
+    columnStyles: {
+      0: { cellWidth: 10 },
+      1: { cellWidth: 45, halign: "left" },
+      2: { cellWidth: 25 }
+    },
+    didDrawPage: (data) => {
+      currentY = data.cursor.y
+    }
+  })
+
+  // 5. Signatures
+  currentY += 15
+  if (currentY > 170) {
+    doc.addPage()
+    currentY = 25
+  }
+
+  doc.setFont("helvetica", "normal")
+  doc.setFontSize(10)
+  doc.text(`Jakarta, ${formatIndonesianDate(new Date())}`, 240, currentY, { align: "center" })
+  doc.text("Wali Kelas,", 240, currentY + 6, { align: "center" })
+  doc.setFont("helvetica", "bold")
+  doc.text("Wali Kelas", 240, currentY + 24, { align: "center" })
+  doc.setFont("helvetica", "normal")
+  doc.text("NIP. ___________________", 240, currentY + 28, { align: "center" })
+
+  doc.save(`Rekap_Nilai_Rapor_Kelas_${className.replace(/\s+/g, "_")}.pdf`)
 }
