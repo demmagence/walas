@@ -207,7 +207,7 @@ export default function AddStudentForm({ classes, parents }) {
             name="gender"
             value={formData.gender}
             onChange={handleChange}
-            className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
+            className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none cursor-pointer"
           >
             <option value="laki-laki">Laki-Laki</option>
             <option value="perempuan">Perempuan</option>
@@ -215,15 +215,22 @@ export default function AddStudentForm({ classes, parents }) {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="religion">Agama</Label>
-          <Input
+          <select
             id="religion"
             name="religion"
-            type="text"
             value={formData.religion}
             onChange={handleChange}
-            placeholder="Contoh: Islam, Kristen, dll."
-            className="h-10 rounded-xl"
-          />
+            className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none cursor-pointer"
+          >
+            <option value="">-- Pilih Agama --</option>
+            <option value="Islam">Islam</option>
+            <option value="Kristen">Kristen</option>
+            <option value="Katolik">Katolik</option>
+            <option value="Hindu">Hindu</option>
+            <option value="Buddha">Buddha</option>
+            <option value="Khonghucu">Khonghucu</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
         </div>
       </div>
 
