@@ -310,14 +310,14 @@ export default function StudentDetailsClient({ role, student, attendances, grade
                     </div>
 
                     <div className="px-6 pb-6">
-                      <table className="w-full border-collapse text-left text-sm">
+                      <table className="w-full text-left text-sm">
                         <thead>
-                          <tr className="border-b border-border/80 text-muted-foreground font-semibold">
+                          <tr className="text-muted-foreground font-semibold">
                             <th className="py-2.5">Mata Pelajaran</th>
                             <th className="py-2.5 text-right">Nilai</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-border/40">
+                        <tbody>
                           {semesterGrades.map((grade) => (
                             <tr key={grade.id} className="hover:bg-muted/5">
                               <td className="py-3 font-medium text-foreground">

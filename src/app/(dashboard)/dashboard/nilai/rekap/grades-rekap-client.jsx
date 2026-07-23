@@ -151,7 +151,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
           <Button
             onClick={handleExportExcel}
             variant="outline"
-            className="h-10 px-4 rounded-xl gap-2 font-semibold border-primary/20 hover:bg-primary/5 text-primary"
+            className="h-10 px-4 rounded-xl gap-2 font-semibold hover:bg-primary/5 text-primary"
           >
             <Download className="h-4.5 w-4.5" />
             <span>Ekspor Rekap Excel</span>
@@ -171,7 +171,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
       </div>
 
       {students.length === 0 || subjects.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card/50 px-6 py-16 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-card/50 px-6 py-16 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
             <Award className="h-6 w-6" />
           </div>
@@ -286,7 +286,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
                 </div>
 
                 {/* Score listing per subject */}
-                <div className="pt-2 border-t border-border/50 space-y-1.5 text-xs">
+                <div className="pt-2 space-y-1.5 text-xs">
                   {subjects.map((sub) => {
                     const score = m.scores[sub.id]
                     return (

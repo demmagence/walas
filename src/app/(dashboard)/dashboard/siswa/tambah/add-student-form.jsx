@@ -85,7 +85,7 @@ export default function AddStudentForm({ classes, parents }) {
 
   if (classes.length === 0) {
     return (
-      <div className="rounded-2xl border border-destructive/20 bg-destructive/10 p-6 text-center space-y-4">
+      <div className="rounded-2xl bg-destructive/10 p-6 text-center space-y-4">
         <div className="flex justify-center text-destructive">
           <AlertCircle className="h-10 w-10" />
         </div>
