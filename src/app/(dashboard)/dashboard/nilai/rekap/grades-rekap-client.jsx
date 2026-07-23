@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { 
@@ -14,16 +15,24 @@ import { exportClassRaporRekapPDF } from '@/lib/export-pdf'
 
 export default function GradesRekapClient({ className, students, subjects, grades, semester, academicYearName }) {
   const router = useRouter()
+  const [isExportingPDF, setIsExportingPDF] = useState(false)
 
   const handleExportPDF = async () => {
-    await exportClassRaporRekapPDF({
-      className,
-      academicYearName,
-      semester,
-      students,
-      subjects,
-      matrix: gradesMatrix
-    })
+    try {
+      setIsExportingPDF(true)
+      await exportClassRaporRekapPDF({
+        className,
+        academicYearName,
+        semester,
+        students,
+        subjects,
+        matrix: gradesMatrix
+      })
+    } catch (err) {
+      console.error("Gagal mendownload PDF Rekap:", err)
+    } finally {
+      setIsExportingPDF(false)
+    }
   }
 
   // Build matrix mapping student grades
@@ -164,11 +173,12 @@ export default function GradesRekapClient({ className, students, subjects, grade
           <div className="flex items-center gap-2">
             <Button
               onClick={handleExportPDF}
+              disabled={isExportingPDF}
               variant="outline"
               className="h-10 px-4 rounded-xl gap-2 font-semibold hover:bg-primary/5 text-primary"
             >
               <FileText className="h-4.5 w-4.5" />
-              <span>Ekspor Rekap PDF (Rapor)</span>
+              <span>{isExportingPDF ? "Mengunduh PDF..." : "Ekspor Rekap PDF (Rapor)"}</span>
             </Button>
             <Button
               onClick={handleExportExcel}
