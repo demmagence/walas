@@ -19,32 +19,33 @@ export default async function EditSiswaPage({ params }) {
     redirect("/dashboard/siswa")
   }
 
-  // Fetch student data by id
-  const { data: student } = await supabase
-    .from("students")
-    .select("*")
-    .eq("id", id)
-    .single()
+  // Fetch student, managed classes, and parent profiles in PARALLEL
+  const [
+    { data: student },
+    { data: managedClasses },
+    { data: parentProfiles }
+  ] = await Promise.all([
+    supabase
+      .from("students")
+      .select("*")
+      .eq("id", id)
+      .single(),
+    supabase
+      .from("classes")
+      .select("id, name, grade_level")
+      .eq("homeroom_teacher", user.id),
+    supabase
+      .from("profiles")
+      .select("id, full_name")
+      .eq("role", "orang_tua")
+      .order("full_name", { ascending: true })
+  ])
 
   if (!student) {
     notFound()
   }
 
-  // Fetch classes managed by this homeroom teacher
-  const { data: managedClasses } = await supabase
-    .from("classes")
-    .select("id, name, grade_level")
-    .eq("homeroom_teacher", user.id)
-
   const classes = managedClasses || []
-
-  // Fetch parent users (profiles with role='orang_tua')
-  const { data: parentProfiles } = await supabase
-    .from("profiles")
-    .select("id, full_name")
-    .eq("role", "orang_tua")
-    .order("full_name", { ascending: true })
-
   const parents = parentProfiles || []
 
   return (
