@@ -85,9 +85,9 @@ export default function EditStudentForm({ student, classes, parents }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 bg-card border border-border rounded-2xl p-6 shadow-sm">
+    <form onSubmit={handleSubmit} className="space-y-6 bg-card rounded-2xl p-6">
       {error && (
-        <div className="flex items-center gap-2.5 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+        <div className="flex items-center gap-2.5 rounded-xl bg-destructive/10 p-4 text-sm text-destructive">
           <AlertCircle className="h-5 w-5 flex-shrink-0" />
           <span>{error}</span>
         </div>
@@ -116,7 +116,7 @@ export default function EditStudentForm({ student, classes, parents }) {
             required
             value={formData.class_id}
             onChange={handleChange}
-            className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+            className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
           >
             <option value="">-- Pilih Kelas --</option>
             {classes.map((cls) => (
@@ -192,7 +192,7 @@ export default function EditStudentForm({ student, classes, parents }) {
             name="gender"
             value={formData.gender}
             onChange={handleChange}
-            className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+            className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
           >
             <option value="laki-laki">Laki-Laki</option>
             <option value="perempuan">Perempuan</option>
@@ -233,7 +233,7 @@ export default function EditStudentForm({ student, classes, parents }) {
             name="parent_user_id"
             value={formData.parent_user_id}
             onChange={handleChange}
-            className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+            className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
           >
             <option value="">-- Pilih Orang Tua / Wali --</option>
             {parents.map((p) => (
@@ -255,12 +255,12 @@ export default function EditStudentForm({ student, classes, parents }) {
           value={formData.address}
           onChange={handleChange}
           placeholder="Masukkan alamat lengkap siswa..."
-          className="w-full px-3 py-2 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-card"
+          className="w-full px-3 py-2 rounded-xl bg-muted/40 text-sm transition-colors outline-none dark:bg-card"
         />
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-end gap-3 pt-4 border-t border-border/50">
+      <div className="flex items-center justify-end gap-3 pt-4">
         <Button
           type="button"
           variant="outline"
@@ -273,7 +273,7 @@ export default function EditStudentForm({ student, classes, parents }) {
         </Button>
         <Button
           type="submit"
-          className="h-10 px-4 rounded-xl gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm"
+          className="h-10 px-4 rounded-xl gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground"
           disabled={loading}
         >
           <Save className="h-4 w-4" />

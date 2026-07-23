@@ -44,7 +44,7 @@ export default async function AdminLayout({ children }) {
       <main className="flex-1 md:ml-64">
         <div className="min-h-screen pb-20 md:pb-0 flex flex-col">
           {/* Header Panel */}
-          <header className="hidden md:flex items-center justify-between border-b border-border bg-card px-8 py-4 shadow-sm">
+          <header className="hidden md:flex items-center justify-between bg-card px-8 py-4">
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5 text-accent" />
               <span className="text-sm font-semibold text-foreground">Mode Administrator</span>
@@ -56,7 +56,7 @@ export default async function AdminLayout({ children }) {
               <form action={handleSignOut}>
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/5 hover:border-destructive/20 transition-all"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-muted/50 px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/10 transition-all"
                 >
                   <LogOut className="h-3.5 w-3.5" />
                   <span>Keluar</span>

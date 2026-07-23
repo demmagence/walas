@@ -50,7 +50,7 @@ export default async function ProfilPage() {
       </div>
 
       {/* Profile Card */}
-      <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+      <div className="rounded-xl bg-card p-6">
         <div className="flex items-center gap-4">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
             <UserCircle className="h-10 w-10" />
@@ -96,7 +96,7 @@ export default async function ProfilPage() {
         <form action={handleSignOut} className="mt-6">
           <button
             type="submit"
-            className="w-full rounded-lg bg-destructive px-4 py-2.5 text-sm font-semibold text-destructive-foreground hover:bg-destructive/90 shadow-sm active:scale-[0.98] transition-all duration-75"
+            className="w-full rounded-lg bg-destructive px-4 py-2.5 text-sm font-semibold text-destructive-foreground hover:bg-destructive/90 active:scale-[0.98] transition-all duration-75"
           >
             Keluar dari Akun
           </button>
