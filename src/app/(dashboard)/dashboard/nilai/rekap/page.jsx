@@ -3,7 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import GradesRekapClient from './grades-rekap-client'
 
 export const metadata = {
-  title: 'Rekap Nilai Rapor — Walas SMK',
+  title: 'Rekap Nilai Rapor - Walas SMK',
   description: 'Rekapitulasi nilai mata pelajaran satu kelas binaan',
 }
 

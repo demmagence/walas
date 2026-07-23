@@ -3,8 +3,8 @@ import { redirect } from "next/navigation"
 import AddStudentForm from "./add-student-form"
 
 export const metadata = {
-  title: "Tambah Siswa — Walas SMK",
-  description: "Tambah biodata siswa baru",
+  title: "Tambah Siswa - Walas SMK",
+  description: "Tambah Data Siswa Baru",
 }
 
 export default async function TambahSiswaPage() {

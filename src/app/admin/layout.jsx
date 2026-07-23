@@ -5,8 +5,8 @@ import AdminNavClient from "./admin-nav-client"
 import { Shield, LogOut } from "lucide-react"
 
 export const metadata = {
-  title: "Admin Panel — Walas SMK",
-  description: "Panel Administrasi Walas SMK",
+  title: "Admin Panel - Walas SMK",
+  description: "Panel Kontrol Administrator",
 }
 
 export default async function AdminLayout({ children }) {

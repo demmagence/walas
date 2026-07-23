@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import { UserCircle } from "lucide-react"
 
 export const metadata = {
-  title: "Profil — Walas SMK",
+  title: "Profil - Walas SMK",
   description: "Halaman profil pengguna",
 }
 

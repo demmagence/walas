@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import GradesClient from './grades-client'
 
 export const metadata = {
-  title: 'Data Nilai Rapor — Walas SMK',
+  title: 'Data Nilai Rapor - Walas SMK',
   description: 'Pengelolaan nilai mata pelajaran dan rapor siswa',
 }
 

@@ -3,8 +3,8 @@ import { redirect } from "next/navigation"
 import DashboardNav from "@/components/dashboard-nav"
 
 export const metadata = {
-  title: "Dashboard — Walas SMK",
-  description: "Dashboard utama aplikasi Walas untuk manajemen wali kelas",
+  title: "Dashboard - Walas SMK",
+  description: "Dashboard Wali Kelas",
 }
 
 export default async function DashboardLayout({ children }) {
