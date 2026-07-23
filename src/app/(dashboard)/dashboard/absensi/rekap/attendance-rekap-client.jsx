@@ -195,7 +195,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
               id="class-select"
               value={selectedClass}
               onChange={(e) => setSelectedClass(e.target.value)}
-              className="h-10 w-full pl-3 pr-8 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
+              className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none cursor-pointer"
             >
               {role === "wali_kelas" ? (
                 classes.map((cls) => (
@@ -214,9 +214,6 @@ export default function AttendanceRekapClient({ role, students, classes }) {
                 </>
               )}
             </select>
-            <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-              ▼
-            </div>
           </div>
         </div>
 

@@ -228,16 +228,13 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="h-10 w-full sm:w-48 pl-9 pr-8 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
+            className="h-10 w-full sm:w-48 pl-9 pr-4 rounded-xl bg-muted/40 text-sm transition-colors outline-none cursor-pointer"
           >
             <option value="all">Semua Peran</option>
             <option value="admin">Admin</option>
             <option value="wali_kelas">Wali Kelas</option>
             <option value="orang_tua">Orang Tua / Wali</option>
           </select>
-          <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-            ▼
-          </div>
         </div>
       </div>
 
