@@ -482,7 +482,7 @@ export default function AdminTahunAjaranClient({ initialAcademicYears }) {
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
+            <div className="flex items-center justify-end gap-3 pt-3">
               <Button
                 type="button"
                 variant="outline"
@@ -495,7 +495,7 @@ export default function AdminTahunAjaranClient({ initialAcademicYears }) {
               <Button
                 type="submit"
                 disabled={loading}
-                className="h-10 px-4 rounded-xl gap-2 font-semibold bg-accent hover:bg-accent/90 text-accent-foreground shadow-sm"
+                className="h-10 px-4 rounded-xl gap-2 font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
               >
                 <Save className="h-4 w-4" />
                 <span>Simpan Periode</span>
@@ -508,7 +508,7 @@ export default function AdminTahunAjaranClient({ initialAcademicYears }) {
       {/* Delete Confirmation Modal */}
       {deletingId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-4">
-          <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-xl animate-in fade-in zoom-in duration-200">
+          <div className="w-full max-w-sm rounded-2xl bg-card p-6 animate-in fade-in zoom-in duration-200">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive mb-4">
               <AlertTriangle className="h-6 w-6" />
             </div>

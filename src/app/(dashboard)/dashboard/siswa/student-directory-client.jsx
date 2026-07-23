@@ -98,7 +98,7 @@ export default function StudentDirectoryClient({ role, initialStudents, classes 
             <select
               value={selectedClass}
               onChange={(e) => setSelectedClass(e.target.value)}
-              className="h-10 w-full sm:w-48 pl-9 pr-8 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+              className="h-10 w-full sm:w-48 pl-9 pr-8 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
             >
               <option value="all">Semua Kelas</option>
               {classes.map((cls) => (

@@ -434,7 +434,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
                 id="role"
                 value={editFormData.role}
                 onChange={(e) => setEditFormData({ ...editFormData, role: e.target.value })}
-                className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-card"
+                className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
               >
                 <option value="admin">Administrator</option>
                 <option value="wali_kelas">Wali Kelas (Teacher)</option>
@@ -443,7 +443,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
+            <div className="flex items-center justify-end gap-3 pt-3">
               <Button
                 type="button"
                 variant="outline"
@@ -456,7 +456,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
               <Button
                 type="submit"
                 disabled={loading}
-                className="h-10 px-4 rounded-xl gap-2 font-semibold bg-accent hover:bg-accent/90 text-accent-foreground shadow-sm"
+                className="h-10 px-4 rounded-xl gap-2 font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
               >
                 <Save className="h-4 w-4" />
                 <span>Simpan Perubahan</span>
@@ -471,9 +471,9 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-4">
           <form
             onSubmit={handleLinkSubmit}
-            className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl animate-in fade-in zoom-in duration-200 space-y-4 flex flex-col max-h-[85vh]"
+            className="w-full max-w-md rounded-2xl bg-card p-6 animate-in fade-in zoom-in duration-200 space-y-4 flex flex-col max-h-[85vh]"
           >
-            <div className="flex items-center justify-between border-b border-border pb-3 flex-shrink-0">
+            <div className="flex items-center justify-between pb-3 flex-shrink-0">
               <div>
                 <h3 className="text-lg font-bold text-foreground">Hubungkan Wali Siswa</h3>
                 <p className="text-xs text-muted-foreground mt-0.5">Wali: {linkingParent.full_name}</p>
@@ -488,7 +488,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive flex-shrink-0">
+              <div className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-xs text-destructive flex-shrink-0">
                 <AlertTriangle className="h-4 w-4 flex-shrink-0" />
                 <span>{error}</span>
               </div>
@@ -500,7 +500,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
               {studentList.length === 0 ? (
                 <p className="text-xs text-muted-foreground text-center py-6">Tidak ada data siswa terdaftar.</p>
               ) : (
-                <div className="divide-y divide-border/40 border border-border rounded-xl bg-secondary/20 p-2 max-h-[40vh] overflow-y-auto">
+                <div className="rounded-xl bg-secondary/20 p-2 max-h-[40vh] overflow-y-auto">
                   {studentList.map((student) => {
                     const isChecked = selectedStudentIds.includes(student.id)
                     return (
@@ -513,7 +513,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => handleCheckboxChange(student.id)}
-                          className="h-4.5 w-4.5 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                          className="h-4.5 w-4.5 rounded text-primary cursor-pointer"
                         />
                       </label>
                     )
@@ -523,7 +523,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-border flex-shrink-0">
+            <div className="flex items-center justify-end gap-3 pt-3 flex-shrink-0">
               <Button
                 type="button"
                 variant="outline"

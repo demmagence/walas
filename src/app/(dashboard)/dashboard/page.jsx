@@ -355,14 +355,14 @@ export default async function BerandaPage() {
                   <div className="grid grid-cols-2 gap-3 pt-2">
                     <Link
                       href="/dashboard/absensi"
-                      className="flex items-center justify-center gap-1.5 rounded-lg border border-border bg-card py-2 text-xs font-bold text-muted-foreground hover:bg-secondary hover:text-foreground transition-all"
+                      className="flex items-center justify-center gap-1.5 rounded-lg bg-secondary py-2 text-xs font-bold text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all"
                     >
                       Detail Absensi
                       <ArrowRight className="h-3 w-3" />
                     </Link>
                     <Link
                       href="/dashboard/nilai"
-                      className="flex items-center justify-center gap-1.5 rounded-lg border border-border bg-card py-2 text-xs font-bold text-muted-foreground hover:bg-secondary hover:text-foreground transition-all"
+                      className="flex items-center justify-center gap-1.5 rounded-lg bg-secondary py-2 text-xs font-bold text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all"
                     >
                       Detail Nilai
                       <ArrowRight className="h-3 w-3" />
@@ -373,7 +373,7 @@ export default async function BerandaPage() {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card p-8 py-16 text-center">
+          <div className="flex flex-col items-center justify-center rounded-xl bg-card p-8 py-16 text-center">
             <AlertCircle className="h-10 w-10 text-muted-foreground mb-4" />
             <h2 className="text-lg font-bold text-foreground">Siswa Belum Terhubung</h2>
             <p className="mt-1 max-w-sm text-sm text-muted-foreground leading-relaxed">
