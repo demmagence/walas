@@ -7,11 +7,24 @@ import {
   Download, 
   FileSpreadsheet, 
   TrendingUp,
-  Award
+  Award,
+  FileText
 } from 'lucide-react'
+import { exportClassRaporRekapPDF } from '@/lib/export-pdf'
 
 export default function GradesRekapClient({ className, students, subjects, grades, semester, academicYearName }) {
   const router = useRouter()
+
+  const handleExportPDF = async () => {
+    await exportClassRaporRekapPDF({
+      className,
+      academicYearName,
+      semester,
+      students,
+      subjects,
+      matrix: gradesMatrix
+    })
+  }
 
   // Build matrix mapping student grades
   const gradesMatrix = students.map((student) => {
@@ -148,14 +161,24 @@ export default function GradesRekapClient({ className, students, subjects, grade
         </Button>
 
         {students.length > 0 && subjects.length > 0 && (
-          <Button
-            onClick={handleExportExcel}
-            variant="outline"
-            className="h-10 px-4 rounded-xl gap-2 font-semibold hover:bg-primary/5 text-primary"
-          >
-            <Download className="h-4.5 w-4.5" />
-            <span>Ekspor Rekap Excel</span>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handleExportPDF}
+              variant="outline"
+              className="h-10 px-4 rounded-xl gap-2 font-semibold hover:bg-primary/5 text-primary"
+            >
+              <FileText className="h-4.5 w-4.5" />
+              <span>Ekspor Rekap PDF (Rapor)</span>
+            </Button>
+            <Button
+              onClick={handleExportExcel}
+              variant="outline"
+              className="h-10 px-4 rounded-xl gap-2 font-semibold hover:bg-primary/5 text-primary"
+            >
+              <Download className="h-4.5 w-4.5" />
+              <span>Ekspor Excel</span>
+            </Button>
+          </div>
         )}
       </div>
 
