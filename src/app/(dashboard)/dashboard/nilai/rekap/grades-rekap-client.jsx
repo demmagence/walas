@@ -32,7 +32,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
       }
     })
 
-    const average = count > 0 ? (sum / count).toFixed(1) : '—'
+    const average = count > 0 ? (sum / count).toFixed(1) : '-'
 
     return {
       id: student.id,
@@ -60,7 +60,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
       }
     })
 
-    acc[subject.id] = count > 0 ? (sum / count).toFixed(1) : '—'
+    acc[subject.id] = count > 0 ? (sum / count).toFixed(1) : '-'
     return acc
   }, {})
 
@@ -68,7 +68,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
   const validAverages = gradesMatrix.map(m => m.averageNum).filter(val => val !== null)
   const classGeneralAverage = validAverages.length > 0 
     ? (validAverages.reduce((acc, curr) => acc + curr, 0) / validAverages.length).toFixed(1)
-    : '—'
+    : '-'
 
   // Excel exporter
   const handleExportExcel = async () => {
@@ -237,7 +237,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
                                 {val}
                               </span>
                             ) : (
-                              <span className="text-muted-foreground font-normal">—</span>
+                              <span className="text-muted-foreground font-normal">-</span>
                             )}
                           </td>
                         )
@@ -299,7 +299,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
                               ? 'text-emerald-600 dark:text-emerald-400' 
                               : 'text-amber-500'
                         }`}>
-                          {score !== null ? score : '—'}
+                          {score !== null ? score : '-'}
                         </span>
                       </div>
                     )

@@ -195,7 +195,7 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
                           ? 'text-emerald-600 dark:text-emerald-400' 
                           : 'text-amber-500'
                     }`}>
-                      {score !== null ? score : '—'}
+                      {score !== null ? score : '-'}
                     </span>
                   </div>
                 )}

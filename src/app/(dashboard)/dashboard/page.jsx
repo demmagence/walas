@@ -14,7 +14,7 @@ import {
 } from "lucide-react"
 
 export const metadata = {
-  title: "Beranda — Walas SMK",
+  title: "Beranda - Walas SMK",
   description: "Halaman beranda dashboard Walas",
 }
 
@@ -131,7 +131,7 @@ export default async function BerandaPage() {
             Selamat Datang, {full_name || "Wali Kelas"}!
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Role: <span className="font-semibold text-primary">Wali Kelas</span> {activeClass && `— Kelas ${activeClassName} (${departmentName})`}
+            Role: <span className="font-semibold text-primary">Wali Kelas</span> {activeClass && `- Kelas ${activeClassName} (${departmentName})`}
           </p>
         </div>
 
@@ -162,7 +162,7 @@ export default async function BerandaPage() {
                   <span className="text-xs font-semibold text-muted-foreground uppercase">Rata-rata Nilai</span>
                   <TrendingUp className="h-5 w-5 text-accent" />
                 </div>
-                <p className="mt-2 text-3xl font-extrabold text-foreground">{classAverage || "—"}</p>
+                <p className="mt-2 text-3xl font-extrabold text-foreground">{classAverage || "-"}</p>
                 <p className="text-[10px] text-muted-foreground mt-1">Akumulasi semua mapel</p>
               </div>
 
@@ -273,7 +273,7 @@ export default async function BerandaPage() {
 
         let totalDays = attendances?.length || 0
         let presentDays = attendances?.filter((a) => a.status === "hadir").length || 0
-        let attendancePercentage = totalDays > 0 ? ((presentDays / totalDays) * 100).toFixed(0) : "—"
+        let attendancePercentage = totalDays > 0 ? ((presentDays / totalDays) * 100).toFixed(0) : "-"
 
         // Academic average score
         const { data: grades } = await supabase
@@ -291,10 +291,10 @@ export default async function BerandaPage() {
         childrenData.push({
           ...child,
           className: childClass || "Belum Masuk Kelas",
-          deptName: childDept || "—",
+          deptName: childDept || "-",
           attendancePercentage,
           totalSubjects,
-          childAverage: childAverage || "—",
+          childAverage: childAverage || "-",
         })
       }
     }
@@ -320,7 +320,7 @@ export default async function BerandaPage() {
                   {/* Child header */}
                   <div className="pb-4">
                     <h3 className="text-lg font-bold text-foreground">{child.full_name}</h3>
-                    <p className="text-xs text-muted-foreground mt-0.5">NISN: {child.nisn || "—"} | NIS: {child.nis || "—"}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">NISN: {child.nisn || "-"} | NIS: {child.nis || "-"}</p>
                     <div className="flex gap-2 mt-2">
                       <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-semibold text-primary">
                         Kelas {child.className}

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import StudentDirectoryClient from "./student-directory-client"
 
 export const metadata = {
-  title: "Data Siswa — Walas SMK",
+  title: "Data Siswa - Walas SMK",
   description: "Daftar siswa dan biodata",
 }
 

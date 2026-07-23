@@ -3,8 +3,8 @@ import { redirect, notFound } from 'next/navigation'
 import SubjectGradesClient from './subject-grades-client'
 
 export const metadata = {
-  title: 'Input Nilai Mapel — Walas SMK',
-  description: 'Input dan edit nilai mata pelajaran siswa',
+  title: 'Input Nilai Mapel - Walas SMK',
+  description: 'Input Nilai Mata Pelajaran Siswa',
 }
 
 export default async function SubjectGradesPage({ params, searchParams }) {

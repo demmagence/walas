@@ -3,8 +3,8 @@ import { redirect } from "next/navigation"
 import AttendanceRekapClient from "./attendance-rekap-client"
 
 export const metadata = {
-  title: "Rekap Absensi — Walas SMK",
-  description: "Laporan rekapitulasi kehadiran siswa",
+  title: "Rekap Absensi - Walas SMK",
+  description: "Rekapitulasi Kehadiran Siswa",
 }
 
 export default async function RekapAbsensiPage() {
