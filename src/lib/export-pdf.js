@@ -264,7 +264,8 @@ export async function exportAttendanceRekapPDF({ className, startDate, endDate, 
   
   drawSignatureSection(doc, currentY, "Wali Kelas", false)
 
-  doc.save(`Rekap_Kehadiran_Kelas_${className.replace(/\s+/g, "_")}.pdf`)
+  const safeClassName = String(className || "Kelas").replace(/\s+/g, "_")
+  doc.save(`Rekap_Kehadiran_Kelas_${safeClassName}.pdf`)
 }
 
 export async function exportClassRaporRekapPDF({ className, academicYearName, semester, students, subjects, matrix }) {
@@ -304,8 +305,8 @@ export async function exportClassRaporRekapPDF({ className, academicYearName, se
   // 3. Details
   doc.setFont("helvetica", "normal")
   doc.setFontSize(10)
-  doc.text(`Kelas          :  Kelas ${className}`, 15, currentY)
-  doc.text(`Tahun Ajaran  :  ${academicYearName} | Semester ${semester}`, 15, currentY + 5)
+  doc.text(`Kelas          :  Kelas ${className || "-"}`, 15, currentY)
+  doc.text(`Tahun Ajaran  :  ${academicYearName || "-"} | Semester ${semester || "1"}`, 15, currentY + 5)
   currentY += 12
 
   // 4. Matrix Table
@@ -368,5 +369,6 @@ export async function exportClassRaporRekapPDF({ className, academicYearName, se
   doc.setFont("helvetica", "normal")
   doc.text("NIP. ___________________", 240, currentY + 28, { align: "center" })
 
-  doc.save(`Rekap_Nilai_Rapor_Kelas_${className.replace(/\s+/g, "_")}.pdf`)
+  const safeClassName = String(className || "Kelas").replace(/\s+/g, "_")
+  doc.save(`Rekap_Nilai_Rapor_Kelas_${safeClassName}.pdf`)
 }
