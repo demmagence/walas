@@ -117,7 +117,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
   const getPercentageColor = (stats) => {
     if (!stats || stats.total === 0) return "text-muted-foreground"
     const percent = (stats.hadir / stats.total) * 100
-    if (percent >= 90) return "text-emerald-600 dark:text-emerald-400 font-bold"
+    if (percent >= 90) return "text-emerald-600 font-bold"
     if (percent >= 75) return "text-amber-500 font-bold"
     return "text-destructive font-bold"
   }
@@ -267,9 +267,9 @@ export default function AttendanceRekapClient({ role, students, classes }) {
                 <tr>
                   <th className="px-6 py-3.5">Nama Lengkap</th>
                   <th className="px-6 py-3.5">NISN / NIS</th>
-                  <th className="px-6 py-3.5 text-center bg-emerald-500/5 text-emerald-600 dark:text-emerald-400">Hadir (H)</th>
-                  <th className="px-6 py-3.5 text-center bg-amber-500/5 text-amber-600 dark:text-amber-400">Sakit (S)</th>
-                  <th className="px-6 py-3.5 text-center bg-blue-500/5 text-blue-600 dark:text-blue-400">Izin (I)</th>
+                  <th className="px-6 py-3.5 text-center bg-emerald-500/5 text-emerald-600">Hadir (H)</th>
+                  <th className="px-6 py-3.5 text-center bg-amber-500/5 text-amber-600">Sakit (S)</th>
+                  <th className="px-6 py-3.5 text-center bg-blue-500/5 text-blue-600">Izin (I)</th>
                   <th className="px-6 py-3.5 text-center bg-destructive/5 text-destructive">Alpha (A)</th>
                   <th className="px-6 py-3.5 text-center font-bold text-foreground">Total Hari</th>
                   <th className="px-6 py-3.5 text-right font-bold text-foreground">Persentase H</th>
@@ -286,7 +286,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
                       <td className="px-6 py-4 text-xs text-muted-foreground font-mono">
                         {student.nisn || "-"} / {student.nis || "-"}
                       </td>
-                      <td className="px-6 py-4 text-center font-semibold text-emerald-600 dark:text-emerald-400">
+                      <td className="px-6 py-4 text-center font-semibold text-emerald-600">
                         {stats.hadir}
                       </td>
                       <td className="px-6 py-4 text-center font-semibold text-amber-500">
@@ -332,8 +332,8 @@ export default function AttendanceRekapClient({ role, students, classes }) {
 
                   <div className="grid grid-cols-5 gap-1 py-2 text-center text-xs">
                     <div className="bg-emerald-500/5 py-1 rounded-lg">
-                      <span className="block text-[9px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold">H</span>
-                      <span className="font-bold text-emerald-600 dark:text-emerald-400">{stats.hadir}</span>
+                      <span className="block text-[9px] uppercase tracking-wider text-emerald-600 font-semibold">H</span>
+                      <span className="font-bold text-emerald-600">{stats.hadir}</span>
                     </div>
                     <div className="bg-amber-500/5 py-1 rounded-lg">
                       <span className="block text-[9px] uppercase tracking-wider text-amber-500 font-semibold">S</span>

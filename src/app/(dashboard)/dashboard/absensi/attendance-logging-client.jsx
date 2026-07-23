@@ -188,7 +188,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
                 id="class-select"
                 value={selectedClass}
                 onChange={(e) => setSelectedClass(e.target.value)}
-                className="h-10 w-full pl-3 pr-8 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
+                className="h-10 w-full pl-3 pr-8 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none"
               >
                 {isWaliKelas ? (
                   classes.map((cls) => (
@@ -227,7 +227,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
       {message && (
         <div className={`flex items-center gap-2.5 rounded-xl p-4 text-sm ${
           message.type === "success" 
-            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" 
+            ? "bg-emerald-500/10 text-emerald-600" 
             : "bg-destructive/10 text-destructive"
         }`}>
           {message.type === "success" ? <Check className="h-5 w-5 flex-shrink-0" /> : <AlertCircle className="h-5 w-5 flex-shrink-0" />}
