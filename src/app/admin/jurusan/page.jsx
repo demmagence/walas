@@ -1,5 +1,4 @@
 import { createClient } from "@/lib/supabase/server"
-import { redirect } from "next/navigation"
 import AdminJurusanClient from "./admin-jurusan-client"
 
 export const metadata = {
@@ -10,24 +9,6 @@ export const metadata = {
 export default async function AdminJurusanPage() {
   const supabase = await createClient()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect("/login")
-  }
-
-  // Verify Admin role
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single()
-
-  if (!profile || profile.role !== "admin") {
-    redirect("/")
-  }
 
   // Fetch all departments
   const { data: departments } = await supabase

@@ -14,21 +14,7 @@ export default async function RekapAbsensiPage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
-    redirect("/login")
-  }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role, full_name")
-    .eq("id", user.id)
-    .single()
-
-  if (!profile) {
-    redirect("/login")
-  }
-
-  const { role } = profile
+  const role = user.user_metadata?.role
 
   let students = []
   let classes = []
