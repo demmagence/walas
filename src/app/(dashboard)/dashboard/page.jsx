@@ -259,7 +259,7 @@ export default async function BerandaPage() {
       const childAttendances = attendancesResult.data?.filter((a) => a.student_id === child.id) || []
       const totalDays = childAttendances.length
       const presentDays = childAttendances.filter((a) => a.status === "hadir").length
-      const attendancePercentage = totalDays > 0 ? ((presentDays / totalDays) * 100).toFixed(0) : "—"
+      const attendancePercentage = totalDays > 0 ? ((presentDays / totalDays) * 100).toFixed(0) : "-"
 
       const childGrades = gradesResult.data?.filter((g) => g.student_id === child.id) || []
       const totalSubjects = childGrades.length
@@ -272,10 +272,10 @@ export default async function BerandaPage() {
       return {
         ...child,
         className: childClass || "Belum Masuk Kelas",
-        deptName: childDept || "—",
+        deptName: childDept || "-",
         attendancePercentage,
         totalSubjects,
-        childAverage: childAverage || "—",
+        childAverage: childAverage || "-",
       }
     })
 

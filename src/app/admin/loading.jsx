@@ -16,7 +16,7 @@ export default function AdminLoading() {
       </div>
 
       {/* Table skeleton */}
-      <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+      <div className="rounded-xl bg-card overflow-hidden">
         {/* Table header */}
         <div className="bg-secondary px-6 py-3 flex gap-8">
           {[...Array(4)].map((_, i) => (
@@ -27,7 +27,7 @@ export default function AdminLoading() {
         {[...Array(6)].map((_, i) => (
           <div
             key={i}
-            className="px-6 py-4 flex gap-8 border-t border-border"
+            className="px-6 py-4 flex gap-8"
           >
             <div className="h-4 w-28 bg-muted rounded" />
             <div className="h-4 w-36 bg-muted rounded" />
