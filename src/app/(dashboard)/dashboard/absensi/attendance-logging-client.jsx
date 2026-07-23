@@ -163,7 +163,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
   return (
     <div className="space-y-6">
       {/* Top Filter and Navigation Controls */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between bg-card border border-border rounded-2xl p-4 shadow-sm">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between bg-card rounded-2xl p-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 flex-1 max-w-xl">
           {/* Date Picker */}
           <div className="space-y-1.5">
@@ -188,7 +188,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
                 id="class-select"
                 value={selectedClass}
                 onChange={(e) => setSelectedClass(e.target.value)}
-                className="h-10 w-full pl-3 pr-8 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+                className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none cursor-pointer"
               >
                 {isWaliKelas ? (
                   classes.map((cls) => (
@@ -198,27 +198,22 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
                   ))
                 ) : (
                   <>
-                    <option value="all">Semua Kelas Anak</option>
+                    <option value="all">Semua Kelas</option>
                     {classes.map((cls) => (
                       <option key={cls.id} value={cls.id}>
-                        {cls.name}
+                        Kelas {cls.name || `${cls.grade_level}`}
                       </option>
                     ))}
                   </>
                 )}
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-muted-foreground">
-                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                </svg>
-              </div>
             </div>
           </div>
         </div>
 
-        {/* Go to Rekap Report Button */}
+        {/* Action Link: Rekap Absensi */}
         <Link href="/dashboard/absensi/rekap" className="sm:self-end">
-          <Button variant="outline" className="w-full h-10 px-4 rounded-xl gap-2 font-semibold border-primary/20 hover:bg-primary/5 text-primary">
+          <Button variant="outline" className="w-full h-10 px-4 rounded-xl gap-2 font-semibold hover:bg-primary/5 text-primary">
             <FileSpreadsheet className="h-4.5 w-4.5" />
             <span>Rekap Absensi</span>
           </Button>
@@ -227,10 +222,10 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
 
       {/* Response Message alerts */}
       {message && (
-        <div className={`flex items-center gap-2.5 rounded-xl border p-4 text-sm ${
+        <div className={`flex items-center gap-2.5 rounded-xl p-4 text-sm ${
           message.type === "success" 
-            ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" 
-            : "border-destructive/20 bg-destructive/10 text-destructive"
+            ? "bg-emerald-500/10 text-emerald-600" 
+            : "bg-destructive/10 text-destructive"
         }`}>
           {message.type === "success" ? <Check className="h-5 w-5 flex-shrink-0" /> : <AlertCircle className="h-5 w-5 flex-shrink-0" />}
           <span>{message.text}</span>
@@ -246,7 +241,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
           <Button
             onClick={handleSave}
             disabled={loading || fetching}
-            className="h-10 px-4 rounded-xl gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm"
+            className="h-10 px-4 rounded-xl gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground"
           >
             <Save className="h-4 w-4" />
             <span>{loading ? "Menyimpan..." : "Simpan Absensi"}</span>
@@ -261,7 +256,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
           <p className="text-sm text-muted-foreground">Memuat catatan absensi...</p>
         </div>
       ) : filteredStudents.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card/50 px-6 py-12 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-card/50 px-6 py-12 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
             <CalendarIcon className="h-6 w-6" />
           </div>
@@ -271,9 +266,9 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
       ) : (
         <div className="space-y-3">
           {/* Desktop Table View */}
-          <div className="hidden md:block overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-            <table className="w-full border-collapse text-left text-sm">
-              <thead className="bg-muted text-muted-foreground font-semibold border-b border-border">
+          <div className="hidden md:block overflow-hidden rounded-xl bg-card">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-muted text-muted-foreground font-semibold">
                 <tr>
                   <th className="px-6 py-3.5">Nama Lengkap</th>
                   <th className="px-6 py-3.5">NISN / NIS</th>
@@ -281,7 +276,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
                   <th className="px-6 py-3.5 w-80">Catatan / Keterangan</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody>
                 {filteredStudents.map((student) => {
                   const state = attendanceMap[student.id] || { status: "hadir", note: "" }
                   return (
@@ -311,7 +306,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
                                 onClick={() => handleStatusChange(student.id, status)}
                                 className={`h-8 w-8 rounded-full text-xs font-bold transition-all ${
                                   active 
-                                    ? `${bgColors[status]} scale-110 shadow-sm ring-2 ring-background` 
+                                    ? `${bgColors[status]} scale-110` 
                                     : "bg-secondary text-secondary-foreground hover:bg-secondary/80 disabled:opacity-60"
                                 }`}
                                 title={status.toUpperCase()}
@@ -344,7 +339,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
             {filteredStudents.map((student) => {
               const state = attendanceMap[student.id] || { status: "hadir", note: "" }
               return (
-                <div key={student.id} className="rounded-xl border border-border bg-card p-4 shadow-sm space-y-3">
+                <div key={student.id} className="rounded-xl bg-card p-4 space-y-3">
                   <div>
                     <h4 className="font-bold text-foreground">{student.full_name}</h4>
                     <p className="text-xs text-muted-foreground font-mono">
@@ -352,7 +347,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between gap-4 py-1.5 border-t border-b border-border/50">
+                  <div className="flex items-center justify-between gap-4 py-1.5">
                     <span className="text-xs font-medium text-muted-foreground">Status:</span>
                     <div className="flex items-center gap-1.5">
                       {["hadir", "sakit", "izin", "alpha"].map((status) => {
@@ -372,7 +367,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
                             onClick={() => handleStatusChange(student.id, status)}
                             className={`h-8 w-8 rounded-full text-xs font-bold transition-all ${
                               active 
-                                ? `${bgColors[status]} scale-110 shadow-sm ring-2 ring-background` 
+                                ? `${bgColors[status]} scale-110` 
                                 : "bg-secondary text-secondary-foreground"
                             }`}
                           >
@@ -405,7 +400,7 @@ export default function AttendanceLoggingClient({ role, students, classes }) {
               <Button
                 onClick={handleSave}
                 disabled={loading || fetching}
-                className="w-full h-11 rounded-xl gap-2 font-bold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm"
+                className="w-full h-11 rounded-xl gap-2 font-bold bg-primary hover:bg-primary/95 text-primary-foreground"
               >
                 <Save className="h-5 w-5" />
                 <span>{loading ? "Menyimpan..." : "Simpan Absensi"}</span>

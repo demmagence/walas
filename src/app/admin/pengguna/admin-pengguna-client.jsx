@@ -190,11 +190,11 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
   const getRoleBadge = (role) => {
     switch (role) {
       case "admin":
-        return "bg-accent/15 text-accent border border-accent/20 font-bold"
+        return "bg-accent/15 text-accent font-bold"
       case "wali_kelas":
-        return "bg-primary/15 text-primary border border-primary/20 font-semibold"
+        return "bg-primary/15 text-primary font-semibold"
       default:
-        return "bg-secondary text-secondary-foreground border border-border"
+        return "bg-secondary text-secondary-foreground"
     }
   }
 
@@ -210,8 +210,8 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
   return (
     <div className="space-y-6">
       {/* Search, Filter, Actions Controls */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-card border border-border rounded-2xl p-4 shadow-sm">
-        <div className="relative flex-1 max-w-md">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-card rounded-2xl p-4">
+        <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="text"
@@ -228,24 +228,19 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="h-10 w-full sm:w-48 pl-9 pr-8 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+            className="h-10 w-full sm:w-48 pl-9 pr-4 rounded-xl bg-muted/40 text-sm transition-colors outline-none cursor-pointer"
           >
             <option value="all">Semua Peran</option>
             <option value="admin">Admin</option>
             <option value="wali_kelas">Wali Kelas</option>
             <option value="orang_tua">Orang Tua / Wali</option>
           </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-muted-foreground">
-            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-            </svg>
-          </div>
         </div>
       </div>
 
       {/* Success Alert */}
       {successMessage && (
-        <div className="flex items-center gap-2.5 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-600 dark:text-emerald-400">
+        <div className="flex items-center gap-2.5 rounded-xl bg-emerald-500/10 p-4 text-sm text-emerald-600 dark:text-emerald-400">
           <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
           <span>{successMessage}</span>
         </div>
@@ -253,7 +248,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
 
       {/* Roster List */}
       {filteredUsers.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card/50 px-6 py-12 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-card/50 px-6 py-12 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent mb-3">
             <Users className="h-6 w-6" />
           </div>
@@ -267,9 +262,9 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
       ) : (
         <>
           {/* Desktop Table View */}
-          <div className="hidden md:block overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-            <table className="w-full border-collapse text-left text-sm">
-              <thead className="bg-muted text-muted-foreground font-semibold border-b border-border">
+          <div className="hidden md:block overflow-hidden rounded-xl bg-card">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-muted text-muted-foreground font-semibold">
                 <tr>
                   <th className="px-6 py-3.5">Nama Pengguna</th>
                   <th className="px-6 py-3.5">Alamat Email</th>
@@ -278,7 +273,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
                   <th className="px-6 py-3.5 text-right w-44">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody>
                 {filteredUsers.map((user) => {
                   const childrenNames = studentList
                     .filter((s) => s.parent_user_id === user.id)
@@ -311,7 +306,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
                             <Button
                               size="sm"
                               variant="outline"
-                              className="rounded-lg text-xs gap-1 py-1 h-7 border-primary/20 text-primary hover:bg-primary/5"
+                              className="rounded-lg text-xs gap-1 py-1 h-7 text-primary hover:bg-primary/5"
                               onClick={() => openLinkModal(user)}
                               title={childrenNames ? `Tersambung: ${childrenNames}` : "Hubungkan ke Siswa"}
                             >
@@ -345,7 +340,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
                 .join(", ")
 
               return (
-                <div key={user.id} className="rounded-xl border border-border bg-card p-4 shadow-sm space-y-3">
+                <div key={user.id} className="rounded-xl bg-card p-4 space-y-3">
                   <div className="flex items-start justify-between">
                     <div>
                       <h4 className="font-bold text-foreground">{user.full_name}</h4>
@@ -357,13 +352,13 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
                   </div>
 
                   {user.role === "orang_tua" && (
-                    <div className="py-2 border-t border-border/50 text-xs">
+                    <div className="py-2 text-xs">
                       <span className="block text-[9px] uppercase tracking-wider text-muted-foreground/60 mb-0.5">Siswa Terkoneksi</span>
                       <span className="font-medium text-foreground">{childrenNames || "Belum ada siswa yang ditautkan."}</span>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-end gap-1.5 pt-2 border-t border-border/50">
+                  <div className="flex items-center justify-end gap-1.5 pt-2">
                     {user.role === "orang_tua" && (
                       <Button size="sm" variant="outline" className="gap-1.5 text-xs text-primary" onClick={() => openLinkModal(user)}>
                         <LinkIcon className="h-3.5 w-3.5" />
@@ -387,9 +382,9 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-4">
           <form
             onSubmit={handleEditSubmit}
-            className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl animate-in fade-in zoom-in duration-200 space-y-4"
+            className="w-full max-w-md rounded-2xl bg-card p-6 animate-in fade-in zoom-in duration-200 space-y-4"
           >
-            <div className="flex items-center justify-between border-b border-border pb-3">
+            <div className="flex items-center justify-between pb-3">
               <h3 className="text-lg font-bold text-foreground">Edit Profil Pengguna</h3>
               <button
                 type="button"
@@ -401,7 +396,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive">
+              <div className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-xs text-destructive">
                 <AlertTriangle className="h-4 w-4 flex-shrink-0" />
                 <span>{error}</span>
               </div>
@@ -410,7 +405,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
             {/* Email (Readonly) */}
             <div className="space-y-1.5">
               <Label>Alamat Email</Label>
-              <div className="h-10 px-3 flex items-center rounded-xl bg-secondary border border-border/50 text-sm font-mono text-muted-foreground w-full">
+              <div className="h-10 px-3 flex items-center rounded-xl bg-secondary text-sm font-mono text-muted-foreground w-full">
                 {editingUser.email}
               </div>
             </div>
@@ -436,7 +431,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
                 id="role"
                 value={editFormData.role}
                 onChange={(e) => setEditFormData({ ...editFormData, role: e.target.value })}
-                className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-card"
+                className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
               >
                 <option value="admin">Administrator</option>
                 <option value="wali_kelas">Wali Kelas (Teacher)</option>
@@ -445,7 +440,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-border">
+            <div className="flex items-center justify-end gap-3 pt-3">
               <Button
                 type="button"
                 variant="outline"
@@ -458,7 +453,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
               <Button
                 type="submit"
                 disabled={loading}
-                className="h-10 px-4 rounded-xl gap-2 font-semibold bg-accent hover:bg-accent/90 text-accent-foreground shadow-sm"
+                className="h-10 px-4 rounded-xl gap-2 font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
               >
                 <Save className="h-4 w-4" />
                 <span>Simpan Perubahan</span>
@@ -473,9 +468,9 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-4">
           <form
             onSubmit={handleLinkSubmit}
-            className="w-full max-w-md rounded-2xl border border-border bg-card p-6 shadow-xl animate-in fade-in zoom-in duration-200 space-y-4 flex flex-col max-h-[85vh]"
+            className="w-full max-w-md rounded-2xl bg-card p-6 animate-in fade-in zoom-in duration-200 space-y-4 flex flex-col max-h-[85vh]"
           >
-            <div className="flex items-center justify-between border-b border-border pb-3 flex-shrink-0">
+            <div className="flex items-center justify-between pb-3 flex-shrink-0">
               <div>
                 <h3 className="text-lg font-bold text-foreground">Hubungkan Wali Siswa</h3>
                 <p className="text-xs text-muted-foreground mt-0.5">Wali: {linkingParent.full_name}</p>
@@ -490,7 +485,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 rounded-lg border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive flex-shrink-0">
+              <div className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-xs text-destructive flex-shrink-0">
                 <AlertTriangle className="h-4 w-4 flex-shrink-0" />
                 <span>{error}</span>
               </div>
@@ -502,7 +497,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
               {studentList.length === 0 ? (
                 <p className="text-xs text-muted-foreground text-center py-6">Tidak ada data siswa terdaftar.</p>
               ) : (
-                <div className="divide-y divide-border/40 border border-border rounded-xl bg-secondary/20 p-2 max-h-[40vh] overflow-y-auto">
+                <div className="rounded-xl bg-secondary/20 p-2 max-h-[40vh] overflow-y-auto">
                   {studentList.map((student) => {
                     const isChecked = selectedStudentIds.includes(student.id)
                     return (
@@ -515,7 +510,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => handleCheckboxChange(student.id)}
-                          className="h-4.5 w-4.5 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                          className="h-4.5 w-4.5 rounded text-primary cursor-pointer"
                         />
                       </label>
                     )
@@ -525,7 +520,7 @@ export default function AdminPenggunaClient({ initialUsers, students }) {
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-border flex-shrink-0">
+            <div className="flex items-center justify-end gap-3 pt-3 flex-shrink-0">
               <Button
                 type="button"
                 variant="outline"

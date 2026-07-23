@@ -52,6 +52,19 @@ export default function StudentDetailsClient({ role, student, attendances, grade
     }
   }
 
+  const [isExporting, setIsExporting] = useState(false)
+
+  const handleExportPDF = async () => {
+    try {
+      setIsExporting(true)
+      await exportStudentRaporPDF({ student, grades })
+    } catch (err) {
+      console.error("Gagal mengekspor PDF Rapor:", err)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Top Bar Navigation */}
@@ -68,17 +81,17 @@ export default function StudentDetailsClient({ role, student, attendances, grade
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            className="rounded-xl h-10 px-3.5 gap-2 font-semibold border-primary/20 text-primary hover:bg-primary/5 shadow-sm"
-            onClick={() => exportStudentRaporPDF({ student, grades })}
-            disabled={grades.length === 0}
+            className="rounded-xl h-10 px-3.5 gap-2 font-semibold text-primary hover:bg-primary/5"
+            onClick={handleExportPDF}
+            disabled={grades.length === 0 || isExporting}
           >
             <FileText className="h-4 w-4" />
-            <span>Ekspor PDF (Rapor)</span>
+            <span>{isExporting ? "Mengunduh PDF..." : "Ekspor PDF (Rapor)"}</span>
           </Button>
 
           {isWaliKelas && (
             <Link href={`/dashboard/siswa/${student.id}/edit`}>
-              <Button className="rounded-xl h-10 px-4 gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm">
+              <Button className="rounded-xl h-10 px-4 gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground">
                 <Edit2 className="h-4 w-4" />
                 <span>Edit Biodata</span>
               </Button>
@@ -88,7 +101,7 @@ export default function StudentDetailsClient({ role, student, attendances, grade
       </div>
 
       {/* Profile Header Summary */}
-      <div className="bg-card border border-border rounded-2xl p-6 shadow-sm flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+      <div className="bg-card rounded-2xl p-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary flex-shrink-0">
           <User className="h-10 w-10" />
         </div>
@@ -107,13 +120,13 @@ export default function StudentDetailsClient({ role, student, attendances, grade
       </div>
 
       {/* Tabs Selector */}
-      <div className="flex border-b border-border/60">
+      <div className="flex">
         <button
           onClick={() => setActiveTab("biodata")}
-          className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold border-b-2 transition-all ${
+          className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold transition-all ${
             activeTab === "biodata"
-              ? "border-primary text-primary"
-              : "border-transparent text-muted-foreground hover:text-foreground"
+              ? "text-primary"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <User className="h-4 w-4" />
@@ -121,10 +134,10 @@ export default function StudentDetailsClient({ role, student, attendances, grade
         </button>
         <button
           onClick={() => setActiveTab("attendance")}
-          className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold border-b-2 transition-all ${
+          className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold transition-all ${
             activeTab === "attendance"
-              ? "border-primary text-primary"
-              : "border-transparent text-muted-foreground hover:text-foreground"
+              ? "text-primary"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <Calendar className="h-4 w-4" />
@@ -132,10 +145,10 @@ export default function StudentDetailsClient({ role, student, attendances, grade
         </button>
         <button
           onClick={() => setActiveTab("grades")}
-          className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold border-b-2 transition-all ${
+          className={`flex items-center gap-2 px-5 py-3 text-sm font-semibold transition-all ${
             activeTab === "grades"
-              ? "border-primary text-primary"
-              : "border-transparent text-muted-foreground hover:text-foreground"
+              ? "text-primary"
+              : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <GraduationCap className="h-4 w-4" />
@@ -149,8 +162,8 @@ export default function StudentDetailsClient({ role, student, attendances, grade
         {activeTab === "biodata" && (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* Personal Details */}
-            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm space-y-4">
-              <h3 className="text-base font-bold text-foreground border-b border-border/50 pb-2">
+            <div className="bg-card rounded-2xl p-6 space-y-4">
+              <h3 className="text-base font-bold text-foreground pb-2">
                 Data Pribadi
               </h3>
               <div className="space-y-3.5">
@@ -188,8 +201,8 @@ export default function StudentDetailsClient({ role, student, attendances, grade
             </div>
 
             {/* School & Contact Details */}
-            <div className="bg-card border border-border rounded-2xl p-6 shadow-sm space-y-4">
-              <h3 className="text-base font-bold text-foreground border-b border-border/50 pb-2">
+            <div className="bg-card rounded-2xl p-6 space-y-4">
+              <h3 className="text-base font-bold text-foreground pb-2">
                 Akademik & Kontak
               </h3>
               <div className="space-y-3.5">
@@ -228,7 +241,7 @@ export default function StudentDetailsClient({ role, student, attendances, grade
 
         {/* ATTENDANCE TAB */}
         {activeTab === "attendance" && (
-          <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
+          <div className="bg-card rounded-2xl overflow-hidden">
             {attendances.length === 0 ? (
               <div className="flex flex-col items-center justify-center p-12 text-center">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
@@ -238,15 +251,15 @@ export default function StudentDetailsClient({ role, student, attendances, grade
                 <p className="mt-1 text-xs text-muted-foreground">Belum ada pencatatan kehadiran yang terekam untuk siswa ini.</p>
               </div>
             ) : (
-              <table className="w-full border-collapse text-left text-sm">
-                <thead className="bg-muted text-muted-foreground font-semibold border-b border-border">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-muted text-muted-foreground font-semibold">
                   <tr>
                     <th className="px-6 py-3">Tanggal</th>
                     <th className="px-6 py-3">Status</th>
                     <th className="px-6 py-3">Keterangan / Catatan</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">
+                <tbody>
                   {attendances.map((att) => (
                     <tr key={att.id} className="hover:bg-muted/10">
                       <td className="px-6 py-4 font-medium text-foreground">
@@ -277,7 +290,7 @@ export default function StudentDetailsClient({ role, student, attendances, grade
         {activeTab === "grades" && (
           <div className="space-y-6">
             {grades.length === 0 ? (
-              <div className="bg-card border border-border rounded-2xl p-12 text-center">
+              <div className="bg-card rounded-2xl p-12 text-center">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3 mx-auto">
                   <GraduationCap className="h-6 w-6" />
                 </div>
@@ -295,8 +308,8 @@ export default function StudentDetailsClient({ role, student, attendances, grade
                 const average = (totalScore / semesterGrades.length).toFixed(2)
 
                 return (
-                  <div key={semesterNum} className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden space-y-4">
-                    <div className="bg-muted px-6 py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-border">
+                  <div key={semesterNum} className="bg-card rounded-2xl overflow-hidden space-y-4">
+                    <div className="bg-muted px-6 py-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                       <div>
                         <h4 className="font-bold text-foreground">Semester {semesterNum}</h4>
                         <p className="text-xs text-muted-foreground">Tahun Ajaran: {semesterGrades[0]?.academic_years?.name}</p>
@@ -310,14 +323,14 @@ export default function StudentDetailsClient({ role, student, attendances, grade
                     </div>
 
                     <div className="px-6 pb-6">
-                      <table className="w-full border-collapse text-left text-sm">
+                      <table className="w-full text-left text-sm">
                         <thead>
-                          <tr className="border-b border-border/80 text-muted-foreground font-semibold">
+                          <tr className="text-muted-foreground font-semibold">
                             <th className="py-2.5">Mata Pelajaran</th>
                             <th className="py-2.5 text-right">Nilai</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-border/40">
+                        <tbody>
                           {semesterGrades.map((grade) => (
                             <tr key={grade.id} className="hover:bg-muted/5">
                               <td className="py-3 font-medium text-foreground">

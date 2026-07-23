@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import {
@@ -50,7 +51,7 @@ export default function AdminNavClient() {
       <nav
         className={cn(
           "fixed bottom-0 left-0 right-0 z-50 md:hidden",
-          "border-t border-border bg-card/95 backdrop-blur-lg",
+          "bg-card/95 backdrop-blur-lg",
           "pb-[env(safe-area-inset-bottom)]"
         )}
         role="navigation"
@@ -75,7 +76,7 @@ export default function AdminNavClient() {
                     className={cn(
                       "flex items-center justify-center rounded-full p-1.5 transition-all duration-200",
                       active
-                        ? "bg-primary/10 text-primary shadow-sm"
+                        ? "bg-primary/10 text-primary"
                         : "text-inherit"
                     )}
                   >
@@ -119,15 +120,21 @@ export default function AdminNavClient() {
         className={cn(
           "hidden md:flex md:flex-col",
           "fixed top-0 left-0 bottom-0 z-40 w-64",
-          "border-r border-sidebar-border bg-sidebar"
+          "bg-sidebar"
         )}
         role="navigation"
         aria-label="Menu navigasi admin samping"
       >
         {/* Logo / Brand */}
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-sidebar-border">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent text-accent-foreground shadow-sm">
-            <ShieldAlert className="h-5 w-5" />
+        <div className="flex items-center gap-3 px-6 py-5">
+          <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-background">
+            <Image
+              src="/images/walas.png"
+              alt="Logo Walas"
+              width={36}
+              height={36}
+              className="object-cover"
+            />
           </div>
           <div>
             <h1 className="text-base font-bold text-sidebar-foreground tracking-tight">
@@ -152,7 +159,7 @@ export default function AdminNavClient() {
                     className={cn(
                       "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
                       active
-                        ? "bg-primary/10 text-primary shadow-sm border border-primary/15"
+                        ? "bg-primary/10 text-primary"
                         : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                     )}
                   >
@@ -169,7 +176,7 @@ export default function AdminNavClient() {
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-sidebar-border px-4 py-3">
+        <div className="px-4 py-3">
           <p className="text-[10px] text-muted-foreground text-center">
             © 2026 Walas Admin
           </p>

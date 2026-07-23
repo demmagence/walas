@@ -98,7 +98,7 @@ export default function StudentDirectoryClient({ role, initialStudents, classes 
             <select
               value={selectedClass}
               onChange={(e) => setSelectedClass(e.target.value)}
-              className="h-10 w-full sm:w-48 pl-9 pr-8 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+              className="h-10 w-full sm:w-48 pl-9 pr-8 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
             >
               <option value="all">Semua Kelas</option>
               {classes.map((cls) => (
@@ -130,14 +130,14 @@ export default function StudentDirectoryClient({ role, initialStudents, classes 
           {isWaliKelas && (
             <>
               <Link href="/dashboard/siswa/import">
-                <Button variant="outline" className="w-full sm:w-auto h-10 px-4 rounded-xl gap-2 font-semibold text-primary hover:text-primary-foreground hover:bg-primary border-primary/40">
+                <Button variant="outline" className="w-full sm:w-auto h-10 px-4 rounded-xl gap-2 font-semibold text-primary hover:text-primary-foreground hover:bg-primary">
                   <FileSpreadsheet className="h-4 w-4" />
                   <span>Impor Excel</span>
                 </Button>
               </Link>
 
               <Link href="/dashboard/siswa/tambah">
-                <Button className="w-full sm:w-auto h-10 px-4 rounded-xl gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm">
+                <Button className="w-full sm:w-auto h-10 px-4 rounded-xl gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground">
                   <Plus className="h-5 w-5" />
                   <span>Tambah Siswa</span>
                 </Button>
@@ -149,7 +149,7 @@ export default function StudentDirectoryClient({ role, initialStudents, classes 
 
       {/* Directory Table / Cards */}
       {filteredStudents.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card/50 px-6 py-12 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-card/50 px-6 py-12 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
             <UserPlus className="h-6 w-6" />
           </div>
@@ -163,9 +163,9 @@ export default function StudentDirectoryClient({ role, initialStudents, classes 
       ) : (
         <>
           {/* Desktop Table View */}
-          <div className="hidden md:block overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-            <table className="w-full border-collapse text-left text-sm">
-              <thead className="bg-muted text-muted-foreground font-semibold border-b border-border">
+          <div className="hidden md:block overflow-hidden rounded-xl bg-card">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-muted text-muted-foreground font-semibold">
                 <tr>
                   <th className="px-6 py-3.5">Nama Lengkap</th>
                   <th className="px-6 py-3.5">NISN / NIS</th>
@@ -175,7 +175,7 @@ export default function StudentDirectoryClient({ role, initialStudents, classes 
                   <th className="px-6 py-3.5 text-right">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody>
                 {filteredStudents.map((student) => (
                   <tr key={student.id} className="hover:bg-muted/30 transition-colors">
                     <td className="px-6 py-4 font-semibold text-foreground">
@@ -233,7 +233,7 @@ export default function StudentDirectoryClient({ role, initialStudents, classes 
           {/* Mobile Card View */}
           <div className="grid grid-cols-1 gap-3 md:hidden">
             {filteredStudents.map((student) => (
-              <div key={student.id} className="rounded-xl border border-border bg-card p-4 shadow-sm space-y-3">
+              <div key={student.id} className="rounded-xl bg-card p-4 space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
                     <h4 className="font-bold text-foreground">{student.full_name}</h4>
@@ -246,7 +246,7 @@ export default function StudentDirectoryClient({ role, initialStudents, classes 
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-border/50 text-muted-foreground">
+                <div className="grid grid-cols-2 gap-2 text-xs pt-1 text-muted-foreground">
                   <div>
                     <span className="block text-[10px] uppercase tracking-wider text-muted-foreground/60">Gender</span>
                     <span className="capitalize font-medium text-foreground">{student.gender || "-"}</span>
@@ -257,7 +257,7 @@ export default function StudentDirectoryClient({ role, initialStudents, classes 
                   </div>
                 </div>
 
-                <div className="flex items-center justify-end gap-1.5 pt-2 border-t border-border/50">
+                <div className="flex items-center justify-end gap-1.5 pt-2">
                   <Link href={`/dashboard/siswa/${student.id}`} className="flex-1">
                     <Button size="sm" variant="outline" className="w-full gap-1.5">
                       <Eye className="h-3.5 w-3.5" />
@@ -294,7 +294,7 @@ export default function StudentDirectoryClient({ role, initialStudents, classes 
       {/* Delete Confirmation Modal Overlay */}
       {deletingId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-4">
-          <div className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-xl animate-in fade-in zoom-in duration-200">
+          <div className="w-full max-w-sm rounded-2xl bg-card p-6 animate-in fade-in zoom-in duration-200">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive mb-4">
               <AlertTriangle className="h-6 w-6" />
             </div>

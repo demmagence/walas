@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import AttendanceLoggingClient from "./attendance-logging-client"
 
 export const metadata = {
-  title: "Absensi — Walas SMK",
+  title: "Absensi - Walas SMK",
   description: "Pencatatan dan pengelolaan absensi siswa harian",
 }
 

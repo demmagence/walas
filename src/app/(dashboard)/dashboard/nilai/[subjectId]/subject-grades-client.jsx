@@ -132,10 +132,10 @@ export default function SubjectGradesClient({ subject, students, initialGrades, 
       </div>
 
       {message && (
-        <div className={`flex items-center gap-2.5 rounded-xl border p-4 text-sm ${
+        <div className={`flex items-center gap-2.5 rounded-xl p-4 text-sm ${
           message.type === 'success' 
-            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
-            : 'border-destructive/20 bg-destructive/10 text-destructive'
+            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
+            : 'bg-destructive/10 text-destructive'
         }`}>
           {message.type === 'success' ? <Check className="h-5 w-5 flex-shrink-0" /> : <AlertCircle className="h-5 w-5 flex-shrink-0" />}
           <span>{message.text}</span>
@@ -143,7 +143,7 @@ export default function SubjectGradesClient({ subject, students, initialGrades, 
       )}
 
       {students.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card/50 px-6 py-12 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-card/50 px-6 py-12 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
             <TrendingUp className="h-6 w-6" />
           </div>
@@ -153,16 +153,16 @@ export default function SubjectGradesClient({ subject, students, initialGrades, 
       ) : (
         <form onSubmit={handleSave} className="space-y-4">
           {/* Desktop Table View */}
-          <div className="hidden md:block overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-            <table className="w-full border-collapse text-left text-sm">
-              <thead className="bg-muted text-muted-foreground font-semibold border-b border-border">
+          <div className="hidden md:block overflow-hidden rounded-xl bg-card">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-muted text-muted-foreground font-semibold">
                 <tr>
                   <th className="px-6 py-3.5">Nama Lengkap</th>
                   <th className="px-6 py-3.5">NISN / NIS</th>
                   <th className="px-6 py-3.5 w-48 text-right">Nilai Akhir (0-100)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody>
                 {students.map((student) => {
                   const state = scores[student.id] || { score: '' }
                   return (
@@ -181,7 +181,7 @@ export default function SubjectGradesClient({ subject, students, initialGrades, 
                           required
                           value={state.score}
                           onChange={(e) => handleScoreChange(student.id, e.target.value)}
-                          className="w-24 text-center h-9 font-bold rounded-lg border-input"
+                          className="w-24 text-center h-9 font-bold rounded-lg"
                           placeholder="0-100"
                           disabled={loading}
                         />
@@ -198,7 +198,7 @@ export default function SubjectGradesClient({ subject, students, initialGrades, 
             {students.map((student) => {
               const state = scores[student.id] || { score: '' }
               return (
-                <div key={student.id} className="rounded-xl border border-border bg-card p-4 shadow-sm space-y-3 flex items-center justify-between">
+                <div key={student.id} className="rounded-xl bg-card p-4 space-y-3 flex items-center justify-between">
                   <div>
                     <h4 className="font-bold text-foreground">{student.full_name}</h4>
                     <p className="text-xs text-muted-foreground font-mono mt-0.5">
@@ -212,7 +212,7 @@ export default function SubjectGradesClient({ subject, students, initialGrades, 
                     required
                     value={state.score}
                     onChange={(e) => handleScoreChange(student.id, e.target.value)}
-                    className="w-20 text-center h-9 font-bold rounded-lg border-input"
+                    className="w-20 text-center h-9 font-bold rounded-lg"
                     placeholder="0-100"
                     disabled={loading}
                   />
@@ -222,7 +222,7 @@ export default function SubjectGradesClient({ subject, students, initialGrades, 
           </div>
 
           {/* Save Buttons */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-border/50">
+          <div className="flex items-center justify-end gap-3 pt-4">
             <Button
               type="button"
               variant="outline"
@@ -235,7 +235,7 @@ export default function SubjectGradesClient({ subject, students, initialGrades, 
             <Button
               type="submit"
               disabled={loading}
-              className="rounded-xl h-10 px-5 gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm"
+              className="rounded-xl h-10 px-5 gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground"
             >
               {loading ? (
                 <>

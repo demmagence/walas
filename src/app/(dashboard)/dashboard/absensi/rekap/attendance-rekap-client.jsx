@@ -117,7 +117,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
   const getPercentageColor = (stats) => {
     if (!stats || stats.total === 0) return "text-muted-foreground"
     const percent = (stats.hadir / stats.total) * 100
-    if (percent >= 90) return "text-emerald-600 dark:text-emerald-400 font-bold"
+    if (percent >= 90) return "text-emerald-600 font-bold"
     if (percent >= 75) return "text-amber-500 font-bold"
     return "text-destructive font-bold"
   }
@@ -137,7 +137,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
 
         <Button
           variant="outline"
-          className="rounded-xl h-10 px-3.5 gap-2 font-semibold border-primary/20 text-primary hover:bg-primary/5 shadow-sm"
+          className="rounded-xl h-10 px-3.5 gap-2 font-semibold text-primary hover:bg-primary/5"
           onClick={() => {
             const className = selectedClass === "all" ? "Semua Kelas" : classes.find(c => c.id === selectedClass)?.name || ""
             exportAttendanceRekapPDF({
@@ -156,7 +156,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
       </div>
 
       {/* Date Range & Filters Bar */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 bg-card border border-border rounded-2xl p-4 shadow-sm">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 bg-card rounded-2xl p-4">
         {/* Start Date */}
         <div className="space-y-1.5">
           <Label htmlFor="start-date" className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
@@ -195,7 +195,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
               id="class-select"
               value={selectedClass}
               onChange={(e) => setSelectedClass(e.target.value)}
-              className="h-10 w-full pl-3 pr-8 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+              className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none cursor-pointer"
             >
               {role === "wali_kelas" ? (
                 classes.map((cls) => (
@@ -214,11 +214,6 @@ export default function AttendanceRekapClient({ role, students, classes }) {
                 </>
               )}
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-muted-foreground">
-              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-              </svg>
-            </div>
           </div>
         </div>
 
@@ -240,7 +235,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
       </div>
 
       {error && (
-        <div className="flex items-center gap-2.5 rounded-xl border border-destructive/20 bg-destructive/10 p-4 text-sm text-destructive">
+        <div className="flex items-center gap-2.5 rounded-xl bg-destructive/10 p-4 text-sm text-destructive">
           <AlertCircle className="h-5 w-5 flex-shrink-0" />
           <span>{error}</span>
         </div>
@@ -253,7 +248,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
           <p className="text-sm text-muted-foreground">Menghitung rekapitulasi kehadiran...</p>
         </div>
       ) : filteredStudents.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card/50 px-6 py-12 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-card/50 px-6 py-12 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
             <TrendingUp className="h-6 w-6" />
           </div>
@@ -263,21 +258,21 @@ export default function AttendanceRekapClient({ role, students, classes }) {
       ) : (
         <div className="space-y-3">
           {/* Desktop Report Table */}
-          <div className="hidden md:block overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-            <table className="w-full border-collapse text-left text-sm">
-              <thead className="bg-muted text-muted-foreground font-semibold border-b border-border">
+          <div className="hidden md:block overflow-hidden rounded-xl bg-card">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-muted text-muted-foreground font-semibold">
                 <tr>
                   <th className="px-6 py-3.5">Nama Lengkap</th>
                   <th className="px-6 py-3.5">NISN / NIS</th>
-                  <th className="px-6 py-3.5 text-center bg-emerald-500/5 text-emerald-600 dark:text-emerald-400">Hadir (H)</th>
-                  <th className="px-6 py-3.5 text-center bg-amber-500/5 text-amber-600 dark:text-amber-400">Sakit (S)</th>
-                  <th className="px-6 py-3.5 text-center bg-blue-500/5 text-blue-600 dark:text-blue-400">Izin (I)</th>
+                  <th className="px-6 py-3.5 text-center bg-emerald-500/5 text-emerald-600">Hadir (H)</th>
+                  <th className="px-6 py-3.5 text-center bg-amber-500/5 text-amber-600">Sakit (S)</th>
+                  <th className="px-6 py-3.5 text-center bg-blue-500/5 text-blue-600">Izin (I)</th>
                   <th className="px-6 py-3.5 text-center bg-destructive/5 text-destructive">Alpha (A)</th>
-                  <th className="px-6 py-3.5 text-center font-bold text-foreground border-l border-border">Total Hari</th>
+                  <th className="px-6 py-3.5 text-center font-bold text-foreground">Total Hari</th>
                   <th className="px-6 py-3.5 text-right font-bold text-foreground">Persentase H</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody>
                 {filteredStudents.map((student) => {
                   const stats = aggregates[student.id] || { hadir: 0, sakit: 0, izin: 0, alpha: 0, total: 0 }
                   return (
@@ -288,7 +283,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
                       <td className="px-6 py-4 text-xs text-muted-foreground font-mono">
                         {student.nisn || "-"} / {student.nis || "-"}
                       </td>
-                      <td className="px-6 py-4 text-center font-semibold text-emerald-600 dark:text-emerald-400">
+                      <td className="px-6 py-4 text-center font-semibold text-emerald-600">
                         {stats.hadir}
                       </td>
                       <td className="px-6 py-4 text-center font-semibold text-amber-500">
@@ -300,7 +295,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
                       <td className="px-6 py-4 text-center font-semibold text-destructive">
                         {stats.alpha}
                       </td>
-                      <td className="px-6 py-4 text-center font-bold text-foreground border-l border-border">
+                      <td className="px-6 py-4 text-center font-bold text-foreground">
                         {stats.total}
                       </td>
                       <td className={`px-6 py-4 text-right ${getPercentageColor(stats)}`}>
@@ -318,7 +313,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
             {filteredStudents.map((student) => {
               const stats = aggregates[student.id] || { hadir: 0, sakit: 0, izin: 0, alpha: 0, total: 0 }
               return (
-                <div key={student.id} className="rounded-xl border border-border bg-card p-4 shadow-sm space-y-3">
+                <div key={student.id} className="rounded-xl bg-card p-4 space-y-3">
                   <div className="flex items-start justify-between">
                     <div>
                       <h4 className="font-bold text-foreground">{student.full_name}</h4>
@@ -332,10 +327,10 @@ export default function AttendanceRekapClient({ role, students, classes }) {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-5 gap-1 py-2 border-t border-border/50 text-center text-xs">
+                  <div className="grid grid-cols-5 gap-1 py-2 text-center text-xs">
                     <div className="bg-emerald-500/5 py-1 rounded-lg">
-                      <span className="block text-[9px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold">H</span>
-                      <span className="font-bold text-emerald-600 dark:text-emerald-400">{stats.hadir}</span>
+                      <span className="block text-[9px] uppercase tracking-wider text-emerald-600 font-semibold">H</span>
+                      <span className="font-bold text-emerald-600">{stats.hadir}</span>
                     </div>
                     <div className="bg-amber-500/5 py-1 rounded-lg">
                       <span className="block text-[9px] uppercase tracking-wider text-amber-500 font-semibold">S</span>
@@ -349,7 +344,7 @@ export default function AttendanceRekapClient({ role, students, classes }) {
                       <span className="block text-[9px] uppercase tracking-wider text-destructive font-semibold">A</span>
                       <span className="font-bold text-destructive">{stats.alpha}</span>
                     </div>
-                    <div className="bg-secondary py-1 rounded-lg border border-border/50">
+                    <div className="bg-secondary py-1 rounded-lg">
                       <span className="block text-[9px] uppercase tracking-wider text-muted-foreground font-bold">Total</span>
                       <span className="font-bold text-foreground">{stats.total}</span>
                     </div>

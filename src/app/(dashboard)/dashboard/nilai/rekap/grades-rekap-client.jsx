@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { 
@@ -7,11 +8,32 @@ import {
   Download, 
   FileSpreadsheet, 
   TrendingUp,
-  Award
+  Award,
+  FileText
 } from 'lucide-react'
+import { exportClassRaporRekapPDF } from '@/lib/export-pdf'
 
 export default function GradesRekapClient({ className, students, subjects, grades, semester, academicYearName }) {
   const router = useRouter()
+  const [isExportingPDF, setIsExportingPDF] = useState(false)
+
+  const handleExportPDF = async () => {
+    try {
+      setIsExportingPDF(true)
+      await exportClassRaporRekapPDF({
+        className,
+        academicYearName,
+        semester,
+        students,
+        subjects,
+        matrix: gradesMatrix
+      })
+    } catch (err) {
+      console.error("Gagal mendownload PDF Rekap:", err)
+    } finally {
+      setIsExportingPDF(false)
+    }
+  }
 
   // Build matrix mapping student grades
   const gradesMatrix = students.map((student) => {
@@ -32,7 +54,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
       }
     })
 
-    const average = count > 0 ? (sum / count).toFixed(1) : '—'
+    const average = count > 0 ? (sum / count).toFixed(1) : '-'
 
     return {
       id: student.id,
@@ -60,7 +82,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
       }
     })
 
-    acc[subject.id] = count > 0 ? (sum / count).toFixed(1) : '—'
+    acc[subject.id] = count > 0 ? (sum / count).toFixed(1) : '-'
     return acc
   }, {})
 
@@ -68,7 +90,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
   const validAverages = gradesMatrix.map(m => m.averageNum).filter(val => val !== null)
   const classGeneralAverage = validAverages.length > 0 
     ? (validAverages.reduce((acc, curr) => acc + curr, 0) / validAverages.length).toFixed(1)
-    : '—'
+    : '-'
 
   // Excel exporter
   const handleExportExcel = async () => {
@@ -148,14 +170,25 @@ export default function GradesRekapClient({ className, students, subjects, grade
         </Button>
 
         {students.length > 0 && subjects.length > 0 && (
-          <Button
-            onClick={handleExportExcel}
-            variant="outline"
-            className="h-10 px-4 rounded-xl gap-2 font-semibold border-primary/20 hover:bg-primary/5 text-primary"
-          >
-            <Download className="h-4.5 w-4.5" />
-            <span>Ekspor Rekap Excel</span>
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handleExportPDF}
+              disabled={isExportingPDF}
+              variant="outline"
+              className="h-10 px-4 rounded-xl gap-2 font-semibold hover:bg-primary/5 text-primary"
+            >
+              <FileText className="h-4.5 w-4.5" />
+              <span>{isExportingPDF ? "Mengunduh PDF..." : "Ekspor Rekap PDF (Rapor)"}</span>
+            </Button>
+            <Button
+              onClick={handleExportExcel}
+              variant="outline"
+              className="h-10 px-4 rounded-xl gap-2 font-semibold hover:bg-primary/5 text-primary"
+            >
+              <Download className="h-4.5 w-4.5" />
+              <span>Ekspor Excel</span>
+            </Button>
+          </div>
         )}
       </div>
 
@@ -171,7 +204,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
       </div>
 
       {students.length === 0 || subjects.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card/50 px-6 py-16 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-card/50 px-6 py-16 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
             <Award className="h-6 w-6" />
           </div>
@@ -182,7 +215,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
         <div className="space-y-6">
           {/* Main Averages Overview cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
-            <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+            <div className="rounded-xl bg-card p-5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-muted-foreground uppercase">Rata-rata Nilai Kelas</span>
                 <TrendingUp className="h-5 w-5 text-primary" />
@@ -190,7 +223,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
               <p className="mt-2 text-3xl font-extrabold text-foreground">{classGeneralAverage}</p>
               <p className="text-[10px] text-muted-foreground mt-1">Akumulasi seluruh siswa & mapel</p>
             </div>
-            <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+            <div className="rounded-xl bg-card p-5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-muted-foreground uppercase">Mata Pelajaran Aktif</span>
                 <Award className="h-5 w-5 text-accent" />
@@ -201,10 +234,10 @@ export default function GradesRekapClient({ className, students, subjects, grade
           </div>
 
           {/* Matrix Report Table - Desktop */}
-          <div className="hidden md:block overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+          <div className="hidden md:block overflow-hidden rounded-xl bg-card">
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-left text-sm min-w-[800px]">
-                <thead className="bg-muted text-muted-foreground font-semibold border-b border-border">
+              <table className="w-full text-left text-sm min-w-[800px]">
+                <thead className="bg-muted text-muted-foreground font-semibold">
                   <tr>
                     <th className="px-4 py-3">Nama Lengkap</th>
                     <th className="px-4 py-3">NISN</th>
@@ -213,12 +246,12 @@ export default function GradesRekapClient({ className, students, subjects, grade
                         {sub.name}
                       </th>
                     ))}
-                    <th className="px-4 py-3 text-right font-bold text-foreground border-l border-border bg-muted/60">
+                    <th className="px-4 py-3 text-right font-bold text-foreground bg-muted/60">
                       Rata-rata
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">
+                <tbody>
                   {/* Student Rows */}
                   {gradesMatrix.map((m) => (
                     <tr key={m.id} className="hover:bg-muted/10">
@@ -237,19 +270,19 @@ export default function GradesRekapClient({ className, students, subjects, grade
                                 {val}
                               </span>
                             ) : (
-                              <span className="text-muted-foreground font-normal">—</span>
+                              <span className="text-muted-foreground font-normal">-</span>
                             )}
                           </td>
                         )
                       })}
-                      <td className="px-4 py-3.5 text-right font-extrabold text-foreground border-l border-border bg-muted/30">
+                      <td className="px-4 py-3.5 text-right font-extrabold text-foreground bg-muted/30">
                         {m.average}
                       </td>
                     </tr>
                   ))}
 
                   {/* Summary/Subject Averages Footer Row */}
-                  <tr className="bg-muted/40 font-bold border-t border-border">
+                  <tr className="bg-muted/40 font-bold">
                     <td colSpan={2} className="px-4 py-3.5 text-foreground text-xs uppercase tracking-wider">
                       Rata-rata Kelas
                     </td>
@@ -261,7 +294,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
                         </td>
                       )
                     })}
-                    <td className="px-4 py-3.5 text-right font-extrabold text-accent border-l border-border bg-muted/60">
+                    <td className="px-4 py-3.5 text-right font-extrabold text-accent bg-muted/60">
                       {classGeneralAverage}
                     </td>
                   </tr>
@@ -273,7 +306,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
           {/* Matrix Report Cards - Mobile */}
           <div className="grid grid-cols-1 gap-3 md:hidden">
             {gradesMatrix.map((m) => (
-              <div key={m.id} className="rounded-xl border border-border bg-card p-4 shadow-sm space-y-3">
+              <div key={m.id} className="rounded-xl bg-card p-4 space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
                     <h4 className="font-bold text-foreground">{m.full_name}</h4>
@@ -286,7 +319,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
                 </div>
 
                 {/* Score listing per subject */}
-                <div className="pt-2 border-t border-border/50 space-y-1.5 text-xs">
+                <div className="pt-2 space-y-1.5 text-xs">
                   {subjects.map((sub) => {
                     const score = m.scores[sub.id]
                     return (
@@ -299,7 +332,7 @@ export default function GradesRekapClient({ className, students, subjects, grade
                               ? 'text-emerald-600 dark:text-emerald-400' 
                               : 'text-amber-500'
                         }`}>
-                          {score !== null ? score : '—'}
+                          {score !== null ? score : '-'}
                         </span>
                       </div>
                     )

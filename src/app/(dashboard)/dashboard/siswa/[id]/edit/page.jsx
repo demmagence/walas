@@ -3,8 +3,8 @@ import { redirect, notFound } from "next/navigation"
 import EditStudentForm from "./edit-student-form"
 
 export const metadata = {
-  title: "Edit Siswa — Walas SMK",
-  description: "Ubah data biodata siswa",
+  title: "Edit Siswa - Walas SMK",
+  description: "Edit Data Siswa Walas",
 }
 
 export default async function EditSiswaPage({ params }) {

@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import ImportClient from './import-client'
 
 export const metadata = {
-  title: 'Impor Masuk Siswa — Walas SMK',
+  title: 'Impor Masuk Siswa - Walas SMK',
   description: 'Impor data siswa secara massal menggunakan file Excel',
 }
 

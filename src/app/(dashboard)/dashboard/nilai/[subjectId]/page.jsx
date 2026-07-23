@@ -3,8 +3,8 @@ import { redirect, notFound } from 'next/navigation'
 import SubjectGradesClient from './subject-grades-client'
 
 export const metadata = {
-  title: 'Input Nilai Mapel — Walas SMK',
-  description: 'Input dan edit nilai mata pelajaran siswa',
+  title: 'Input Nilai Mapel - Walas SMK',
+  description: 'Input Nilai Mata Pelajaran Siswa',
 }
 
 export default async function SubjectGradesPage({ params, searchParams }) {
@@ -54,7 +54,7 @@ export default async function SubjectGradesPage({ params, searchParams }) {
 
   if (!activeYear) {
     return (
-      <div className="px-4 py-8 max-w-xl mx-auto text-center rounded-2xl border border-destructive/20 bg-destructive/10">
+      <div className="px-4 py-8 max-w-xl mx-auto text-center rounded-2xl bg-destructive/10">
         <h3 className="text-lg font-bold text-destructive">Tahun Ajaran Aktif Belum Diatur</h3>
         <p className="text-sm text-muted-foreground mt-1">
           Administrator harus menentukan tahun ajaran aktif terlebih dahulu sebelum pengisian nilai dimulai.

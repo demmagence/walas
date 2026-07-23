@@ -3,8 +3,8 @@ import { redirect, notFound } from "next/navigation"
 import StudentDetailsClient from "./student-details-client"
 
 export const metadata = {
-  title: "Detail Siswa — Walas SMK",
-  description: "Informasi lengkap data siswa",
+  title: "Detail Siswa - Walas SMK",
+  description: "Detail Biodata Siswa",
 }
 
 export default async function StudentDetailPage({ params }) {

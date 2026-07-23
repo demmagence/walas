@@ -2,8 +2,8 @@ import { createClient } from "@/lib/supabase/server"
 import AdminTahunAjaranClient from "./admin-tahun-ajaran-client"
 
 export const metadata = {
-  title: "Manajemen Tahun Ajaran — Walas SMK",
-  description: "Kelola data tahun ajaran sekolah",
+  title: "Manajemen Tahun Ajaran - Walas SMK",
+  description: "Pengelolaan Tahun Ajaran Sekolah",
 }
 
 export default async function AdminTahunAjaranPage() {

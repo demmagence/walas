@@ -62,7 +62,7 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
   return (
     <div className="space-y-6">
       {/* Filters and Config Card */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-end justify-between bg-card border border-border rounded-2xl p-5 shadow-sm">
+      <div className="flex flex-col gap-4 md:flex-row md:items-end justify-between bg-card rounded-2xl p-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 flex-1 max-w-2xl">
           {/* Semester Selector */}
           <div className="space-y-1.5">
@@ -74,7 +74,7 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
               id="semester-select"
               value={semester}
               onChange={(e) => setSemester(e.target.value)}
-              className="h-10 w-full px-3 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+              className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none appearance-none dark:bg-card"
             >
               <option value="1">Semester 1 (Ganjil)</option>
               <option value="2">Semester 2 (Genap)</option>
@@ -90,7 +90,7 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
                   id="class-select"
                   value={selectedClassId}
                   onChange={(e) => setSelectedClassId(e.target.value)}
-                  className="h-10 w-full pl-3 pr-8 rounded-xl border border-input bg-transparent text-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 appearance-none dark:bg-card"
+                  className="h-10 w-full px-3 rounded-xl bg-muted/40 text-sm transition-colors outline-none cursor-pointer"
                 >
                   {classes.map((cls) => (
                     <option key={cls.id} value={cls.id}>
@@ -98,11 +98,6 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
                     </option>
                   ))}
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-muted-foreground">
-                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                  </svg>
-                </div>
               </div>
             </div>
           )}
@@ -111,7 +106,7 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
         {/* Rekapitulasi Rapor Shortcut Link */}
         {isWaliKelas && selectedClassId && (
           <Link href={`/dashboard/nilai/rekap?semester=${semester}&classId=${selectedClassId}`}>
-            <Button variant="outline" className="w-full md:w-auto h-10 px-4 rounded-xl gap-2 font-semibold border-primary/20 hover:bg-primary/5 text-primary">
+            <Button variant="outline" className="w-full md:w-auto h-10 px-4 rounded-xl gap-2 font-semibold hover:bg-primary/5 text-primary">
               <FileText className="h-4.5 w-4.5" />
               <span>Lihat Rekap Kelas</span>
             </Button>
@@ -127,7 +122,7 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
         {isWaliKelas && selectedClassId && (
           <Button
             onClick={() => setIsModalOpen(true)}
-            className="h-10 px-4 rounded-xl gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm"
+            className="h-10 px-4 rounded-xl gap-2 font-semibold bg-primary hover:bg-primary/95 text-primary-foreground"
           >
             <Plus className="h-4 w-4" />
             <span>Tambah Mapel</span>
@@ -137,7 +132,7 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
 
       {/* Grid of Subjects */}
       {filteredSubjects.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-card/50 px-6 py-12 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl bg-card/50 px-6 py-12 text-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
             <BookOpen className="h-6 w-6" />
           </div>
@@ -159,7 +154,7 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
             return (
               <div
                 key={subject.id}
-                className="group flex flex-col justify-between rounded-xl border border-border bg-card p-5 shadow-sm hover:border-primary/40 transition-all"
+                className="group flex flex-col justify-between rounded-xl bg-card p-5 transition-all"
               >
                 <div className="flex items-start gap-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary flex-shrink-0">
@@ -177,7 +172,7 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
 
                 {isWaliKelas ? (
                   /* Teacher Action to Input Grades */
-                  <div className="mt-6 pt-3 border-t border-border/40 flex justify-end">
+                  <div className="mt-6 pt-3 flex justify-end">
                     <Link
                       href={`/dashboard/nilai/${subject.id}?semester=${semester}`}
                       className="flex items-center gap-1 text-xs font-bold text-primary group-hover:text-accent transition-colors"
@@ -188,7 +183,7 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
                   </div>
                 ) : (
                   /* Parent Read-only Grade display */
-                  <div className="mt-6 pt-3 border-t border-border/40 flex items-center justify-between text-xs">
+                  <div className="mt-6 pt-3 flex items-center justify-between text-xs">
                     <span className="text-muted-foreground">Nilai Akhir:</span>
                     <span className={`text-base font-extrabold ${
                       score === null 
@@ -197,7 +192,7 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
                           ? 'text-emerald-600 dark:text-emerald-400' 
                           : 'text-amber-500'
                     }`}>
-                      {score !== null ? score : '—'}
+                      {score !== null ? score : '-'}
                     </span>
                   </div>
                 )}
@@ -212,15 +207,15 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-4">
           <form 
             onSubmit={handleAddSubject} 
-            className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-xl animate-in fade-in zoom-in duration-200 space-y-4"
+            className="w-full max-w-sm rounded-2xl bg-card p-6 animate-in fade-in zoom-in duration-200 space-y-4"
           >
-            <div className="flex items-center gap-2.5 pb-2 border-b border-border/50">
+            <div className="flex items-center gap-2.5 pb-2">
               <Settings className="h-5 w-5 text-primary" />
               <h3 className="text-base font-bold text-foreground">Tambah Mata Pelajaran</h3>
             </div>
 
             {error && (
-              <div className="flex items-center gap-2.5 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive">
+              <div className="flex items-center gap-2.5 rounded-xl bg-destructive/10 p-3 text-xs text-destructive">
                 <AlertCircle className="h-4.5 w-4.5 flex-shrink-0" />
                 <span>{error}</span>
               </div>
@@ -257,7 +252,7 @@ export default function GradesClient({ role, initialSubjects, classes, activeAca
               <Button
                 type="submit"
                 disabled={loading || !newSubjectName.trim()}
-                className="rounded-lg h-9 px-4 bg-primary hover:bg-primary/95 text-primary-foreground shadow-sm"
+                className="rounded-lg h-9 px-4 bg-primary hover:bg-primary/95 text-primary-foreground"
               >
                 {loading ? 'Menyimpan...' : 'Simpan'}
               </Button>

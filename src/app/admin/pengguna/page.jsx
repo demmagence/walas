@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import AdminPenggunaClient from "./admin-pengguna-client"
 
 export const metadata = {
-  title: "Manajemen Pengguna — Walas SMK",
+  title: "Manajemen Pengguna - Walas SMK",
   description: "Kelola peran pengguna dan tautkan wali siswa",
 }
 
