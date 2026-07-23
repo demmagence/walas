@@ -12,12 +12,9 @@ export async function updateSession(request) {
     request.nextUrl.pathname.startsWith('/api') ||
     request.nextUrl.pathname.match(/\.(svg|png|jpg|jpeg|gif|webp|ico|css|js)$/)
 
-  const isPrefetch = 
-    request.headers.get('next-router-prefetch') || 
-    request.headers.get('purpose') === 'prefetch'
-
-  // Skip middleware auth checks for static assets, API routes, and Next.js prefetch requests
-  if (isStaticOrAsset || isPrefetch) {
+  // Skip middleware auth checks for static assets and API routes only.
+  // Prefetch requests still need session refresh so navigations are instant.
+  if (isStaticOrAsset) {
     return supabaseResponse
   }
 

@@ -29,25 +29,22 @@ export default async function BerandaPage() {
     redirect("/login")
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role, full_name")
-    .eq("id", user.id)
-    .single()
-
-  if (!profile) {
-    redirect("/login")
-  }
-
-  const { role, full_name } = profile
+  // Use JWT metadata instead of querying profiles table (layout already verified auth)
+  const role = user.user_metadata?.role
+  const full_name = user.user_metadata?.full_name
 
   // ==========================================
   // WALI KELAS VIEW LOGIC
   // ==========================================
   if (role === "wali_kelas") {
+    // Use Supabase joins to fetch class + department + academic year in one query
     const { data: activeClass } = await supabase
       .from("classes")
-      .select("id, name, department_id, academic_year_id")
+      .select(`
+        id, name,
+        departments ( name ),
+        academic_years ( name )
+      `)
       .eq("homeroom_teacher", user.id)
       .order("created_at", { ascending: false })
       .limit(1)
@@ -62,46 +59,34 @@ export default async function BerandaPage() {
 
     if (activeClass) {
       activeClassName = activeClass.name
+      departmentName = activeClass.departments?.name || ""
+      academicYearName = activeClass.academic_years?.name || ""
 
-      // Fetch metadata details safely
-      const { data: dept } = await supabase
-        .from("departments")
-        .select("name")
-        .eq("id", activeClass.department_id)
-        .single()
-      if (dept) departmentName = dept.name
-
-      const { data: ay } = await supabase
-        .from("academic_years")
-        .select("name")
-        .eq("id", activeClass.academic_year_id)
-        .single()
-      if (ay) academicYearName = ay.name
-
-      // Count students in class
-      const { count } = await supabase
-        .from("students")
-        .select("*", { count: "exact", head: true })
-        .eq("class_id", activeClass.id)
-      totalStudents = count || 0
-
-      // Fetch student IDs
+      // Fetch students (needed for count + IDs for further queries)
       const { data: students } = await supabase
         .from("students")
         .select("id")
         .eq("class_id", activeClass.id)
 
+      totalStudents = students?.length || 0
       const studentIds = students?.map((s) => s.id) || []
 
       if (studentIds.length > 0) {
-        // Today's attendance
+        // Fetch attendance and grades in PARALLEL instead of sequential
         const today = new Date().toISOString().split("T")[0]
-        const { data: attendances } = await supabase
-          .from("attendances")
-          .select("status")
-          .in("student_id", studentIds)
-          .eq("date", today)
+        const [attendanceResult, gradesResult] = await Promise.all([
+          supabase
+            .from("attendances")
+            .select("status")
+            .in("student_id", studentIds)
+            .eq("date", today),
+          supabase
+            .from("grades")
+            .select("score")
+            .in("student_id", studentIds),
+        ])
 
+        const attendances = attendanceResult.data
         if (attendances) {
           attendances.forEach((att) => {
             if (att.status in attendanceToday) {
@@ -110,12 +95,7 @@ export default async function BerandaPage() {
           })
         }
 
-        // Class average grade
-        const { data: grades } = await supabase
-          .from("grades")
-          .select("score")
-          .in("student_id", studentIds)
-
+        const grades = gradesResult.data
         if (grades && grades.length > 0) {
           const sum = grades.reduce((acc, curr) => acc + Number(curr.score), 0)
           classAverage = (sum / grades.length).toFixed(1)
@@ -237,67 +217,67 @@ export default async function BerandaPage() {
       .select("id, full_name, nisn, nis, class_id")
       .eq("parent_user_id", user.id)
 
-    const childrenData = []
-    if (children && children.length > 0) {
-      for (const child of children) {
-        let childClass = null
-        let childDept = null
+    // Fetch all children data in PARALLEL instead of sequential loop
+    const startOfMonth = new Date()
+    startOfMonth.setDate(1)
+    const startOfMonthStr = startOfMonth.toISOString().split("T")[0]
+    const childIds = children?.map((c) => c.id) || []
 
-        if (child.class_id) {
-          const { data: cl } = await supabase
+    // Batch fetch classes (with department join), attendances, and grades for ALL children
+    const classIds = [...new Set(children?.map((c) => c.class_id).filter(Boolean) || [])]
+    const [classesResult, attendancesResult, gradesResult] = await Promise.all([
+      classIds.length > 0
+        ? supabase
             .from("classes")
-            .select("name, department_id")
-            .eq("id", child.class_id)
-            .single()
-          if (cl) {
-            childClass = cl.name
-            const { data: dp } = await supabase
-              .from("departments")
-              .select("name")
-              .eq("id", cl.department_id)
-              .single()
-            if (dp) childDept = dp.name
-          }
-        }
+            .select("id, name, departments ( name )")
+            .in("id", classIds)
+        : { data: [] },
+      childIds.length > 0
+        ? supabase
+            .from("attendances")
+            .select("student_id, status")
+            .in("student_id", childIds)
+            .gte("date", startOfMonthStr)
+        : { data: [] },
+      childIds.length > 0
+        ? supabase
+            .from("grades")
+            .select("student_id, score")
+            .in("student_id", childIds)
+        : { data: [] },
+    ])
 
-        // Monthly attendance percentage calculation
-        const startOfMonth = new Date()
-        startOfMonth.setDate(1)
-        const startOfMonthStr = startOfMonth.toISOString().split("T")[0]
+    // Build lookup maps
+    const classMap = new Map()
+    classesResult.data?.forEach((cl) => classMap.set(cl.id, cl))
 
-        const { data: attendances } = await supabase
-          .from("attendances")
-          .select("status")
-          .eq("student_id", child.id)
-          .gte("date", startOfMonthStr)
+    const childrenData = (children || []).map((child) => {
+      const cl = classMap.get(child.class_id)
+      const childClass = cl?.name || null
+      const childDept = cl?.departments?.name || null
 
-        let totalDays = attendances?.length || 0
-        let presentDays = attendances?.filter((a) => a.status === "hadir").length || 0
-        let attendancePercentage = totalDays > 0 ? ((presentDays / totalDays) * 100).toFixed(0) : "—"
+      const childAttendances = attendancesResult.data?.filter((a) => a.student_id === child.id) || []
+      const totalDays = childAttendances.length
+      const presentDays = childAttendances.filter((a) => a.status === "hadir").length
+      const attendancePercentage = totalDays > 0 ? ((presentDays / totalDays) * 100).toFixed(0) : "—"
 
-        // Academic average score
-        const { data: grades } = await supabase
-          .from("grades")
-          .select("score")
-          .eq("student_id", child.id)
-
-        let totalSubjects = grades?.length || 0
-        let childAverage = null
-        if (grades && grades.length > 0) {
-          const sum = grades.reduce((acc, curr) => acc + Number(curr.score), 0)
-          childAverage = (sum / grades.length).toFixed(1)
-        }
-
-        childrenData.push({
-          ...child,
-          className: childClass || "Belum Masuk Kelas",
-          deptName: childDept || "—",
-          attendancePercentage,
-          totalSubjects,
-          childAverage: childAverage || "—",
-        })
+      const childGrades = gradesResult.data?.filter((g) => g.student_id === child.id) || []
+      const totalSubjects = childGrades.length
+      let childAverage = null
+      if (childGrades.length > 0) {
+        const sum = childGrades.reduce((acc, curr) => acc + Number(curr.score), 0)
+        childAverage = (sum / childGrades.length).toFixed(1)
       }
-    }
+
+      return {
+        ...child,
+        className: childClass || "Belum Masuk Kelas",
+        deptName: childDept || "—",
+        attendancePercentage,
+        totalSubjects,
+        childAverage: childAverage || "—",
+      }
+    })
 
     return (
       <div className="px-4 py-6 md:px-8 md:py-8 space-y-8 max-w-7xl mx-auto">

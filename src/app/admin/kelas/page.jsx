@@ -1,28 +1,9 @@
 import { createClient } from "@/lib/supabase/server"
-import { redirect } from "next/navigation"
 import AdminKelasClient from "./admin-kelas-client"
 
 export default async function AdminKelasPage() {
   const supabase = await createClient()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect("/login")
-  }
-
-  // Double check admin role
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single()
-
-  if (!profile || profile.role !== "admin") {
-    redirect("/")
-  }
 
   // Fetch all classes
   const { data: classesList } = await supabase

@@ -15,20 +15,7 @@ export default async function StudentDetailPage({ params }) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
-    redirect("/login")
-  }
-
-  // Fetch current user role
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single()
-
-  if (!profile) {
-    redirect("/login")
-  }
+  const profile = { role: user.user_metadata?.role }
 
   // Fetch student details
   const { data: student, error: studentError } = await supabase

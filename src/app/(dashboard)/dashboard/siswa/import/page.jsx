@@ -10,20 +10,9 @@ export const metadata = {
 export default async function ImportSiswaPage() {
   const supabase = await createClient()
 
-  // Authenticate user
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Get user profile role
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-
-  if (!profile || profile.role !== 'wali_kelas') {
+  
+  if (user.user_metadata?.role !== 'wali_kelas') {
     redirect('/dashboard/siswa')
   }
 
