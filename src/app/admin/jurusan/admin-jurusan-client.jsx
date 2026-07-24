@@ -115,7 +115,11 @@ export default function AdminJurusanClient({ initialDepartments }) {
       setIsOpen(false)
       setTimeout(() => setSuccessMessage(null), 3000)
     } catch (err) {
-      setError(err.message || "Gagal menyimpan informasi jurusan.")
+      if (err.code === "23505" || err.message?.includes("departments_name_key")) {
+        setError(`Nama jurusan "${formData.name.trim()}" sudah terdaftar. Silakan gunakan nama jurusan lain.`)
+      } else {
+        setError(err.message || "Gagal menyimpan informasi jurusan.")
+      }
     } finally {
       setLoading(false)
     }
