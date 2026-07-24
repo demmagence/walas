@@ -10,17 +10,21 @@ export default async function AdminPenggunaPage() {
   const supabase = await createClient()
 
 
-  // Fetch users list via RPC function
-  const { data: users, error: rpcError } = await supabase.rpc("get_users_list")
+  // Fetch users list and students list in parallel
+  const [
+    { data: users, error: rpcError },
+    { data: students }
+  ] = await Promise.all([
+    supabase.rpc("get_users_list"),
+    supabase
+      .from("students")
+      .select("id, full_name, parent_user_id")
+      .order("full_name", { ascending: true })
+  ])
+
   if (rpcError) {
     console.error("Error executing RPC get_users_list:", rpcError)
   }
-
-  // Fetch students list for parenting links
-  const { data: students } = await supabase
-    .from("students")
-    .select("id, full_name, parent_user_id")
-    .order("full_name", { ascending: true })
 
   return (
     <div className="px-4 py-6 md:px-8 md:py-8">
