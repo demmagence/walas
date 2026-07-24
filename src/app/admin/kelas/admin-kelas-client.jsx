@@ -141,7 +141,11 @@ export default function AdminKelasClient({ initialClasses, departments, academic
       setIsOpen(false)
       setTimeout(() => setSuccessMessage(null), 3000)
     } catch (err) {
-      setError(err.message || "Gagal menyimpan informasi kelas.")
+      if (err.code === "23505" || err.message?.includes("classes_name_academic_year_id_key")) {
+        setError(`Kelas "${formData.name.trim()}" sudah terdaftar pada tahun ajaran yang dipilih.`)
+      } else {
+        setError(err.message || "Gagal menyimpan informasi kelas.")
+      }
     } finally {
       setLoading(false)
     }

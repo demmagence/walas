@@ -190,7 +190,11 @@ export default function AdminTahunAjaranClient({ initialAcademicYears }) {
       setIsOpen(false)
       setTimeout(() => setSuccessMessage(null), 3000)
     } catch (err) {
-      setError(err.message || "Gagal menyimpan informasi tahun ajaran.")
+      if (err.code === "23505" || err.message?.includes("academic_years_name_key")) {
+        setError(`Tahun ajaran "${formData.name.trim()}" sudah terdaftar. Silakan gunakan nama tahun ajaran yang berbeda.`)
+      } else {
+        setError(err.message || "Gagal menyimpan informasi tahun ajaran.")
+      }
     } finally {
       setLoading(false)
     }
