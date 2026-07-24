@@ -1,7 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
+import { revalidateCacheAction } from "@/lib/actions/cache-actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -17,6 +19,7 @@ import {
 } from "lucide-react"
 
 export default function AdminKelasClient({ initialClasses, departments, academicYears, teachers }) {
+  const router = useRouter()
   const supabase = createClient()
   const [classes, setClasses] = useState(initialClasses)
   const [searchQuery, setSearchQuery] = useState("")
@@ -138,6 +141,9 @@ export default function AdminKelasClient({ initialClasses, departments, academic
         setSuccessMessage("Kelas baru berhasil didaftarkan!")
       }
 
+      await revalidateCacheAction('classes', '/admin/kelas')
+      router.refresh()
+
       setIsOpen(false)
       setTimeout(() => setSuccessMessage(null), 3000)
     } catch (err) {
@@ -169,6 +175,9 @@ export default function AdminKelasClient({ initialClasses, departments, academic
       }
 
       setClasses(classes.filter((c) => c.id !== id))
+      await revalidateCacheAction('classes', '/admin/kelas')
+      router.refresh()
+
       setDeletingId(null)
       setDeletingName("")
       setSuccessMessage("Kelas berhasil dihapus!")

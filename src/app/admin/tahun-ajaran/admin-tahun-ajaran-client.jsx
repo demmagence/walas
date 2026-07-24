@@ -1,7 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
+import { revalidateCacheAction } from "@/lib/actions/cache-actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,6 +21,7 @@ import {
 } from "lucide-react"
 
 export default function AdminTahunAjaranClient({ initialAcademicYears }) {
+  const router = useRouter()
   const supabase = createClient()
   const [academicYears, setAcademicYears] = useState(initialAcademicYears)
   const [searchQuery, setSearchQuery] = useState("")
@@ -73,7 +76,10 @@ export default function AdminTahunAjaranClient({ initialAcademicYears }) {
 
       if (activateError) throw activateError
 
-      // 3. Update local state
+      // 3. Purge Next.js Server Cache & Update local state
+      await revalidateCacheAction('academic-years', '/admin/tahun-ajaran')
+      router.refresh()
+
       setAcademicYears(
         academicYears.map((y) => {
           if (y.id === id) return data
@@ -187,6 +193,10 @@ export default function AdminTahunAjaranClient({ initialAcademicYears }) {
         setSuccessMessage("Tahun ajaran baru berhasil didaftarkan!")
       }
 
+      // Purge Next.js Server Cache & Refresh
+      await revalidateCacheAction('academic-years', '/admin/tahun-ajaran')
+      router.refresh()
+
       setIsOpen(false)
       setTimeout(() => setSuccessMessage(null), 3000)
     } catch (err) {
@@ -217,6 +227,9 @@ export default function AdminTahunAjaranClient({ initialAcademicYears }) {
       }
 
       setAcademicYears(academicYears.filter((y) => y.id !== id))
+      await revalidateCacheAction('academic-years', '/admin/tahun-ajaran')
+      router.refresh()
+
       setDeletingId(null)
       setDeletingName("")
       setSuccessMessage("Tahun ajaran berhasil dihapus!")

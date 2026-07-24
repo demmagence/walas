@@ -1,7 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
+import { revalidateCacheAction } from "@/lib/actions/cache-actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -17,6 +19,7 @@ import {
 } from "lucide-react"
 
 export default function AdminJurusanClient({ initialDepartments }) {
+  const router = useRouter()
   const supabase = createClient()
   const [departments, setDepartments] = useState(initialDepartments)
   const [searchQuery, setSearchQuery] = useState("")
@@ -112,6 +115,9 @@ export default function AdminJurusanClient({ initialDepartments }) {
         setSuccessMessage("Jurusan baru berhasil didaftarkan!")
       }
 
+      await revalidateCacheAction('departments', '/admin/jurusan')
+      router.refresh()
+
       setIsOpen(false)
       setTimeout(() => setSuccessMessage(null), 3000)
     } catch (err) {
@@ -142,6 +148,9 @@ export default function AdminJurusanClient({ initialDepartments }) {
       }
 
       setDepartments(departments.filter((d) => d.id !== id))
+      await revalidateCacheAction('departments', '/admin/jurusan')
+      router.refresh()
+
       setDeletingId(null)
       setDeletingName("")
       setSuccessMessage("Jurusan berhasil dihapus!")
