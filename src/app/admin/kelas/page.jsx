@@ -1,16 +1,17 @@
 import { createClient } from "@/lib/supabase/server"
+import { getCachedDepartments, getCachedAcademicYears } from "@/lib/data-cache"
 import AdminKelasClient from "./admin-kelas-client"
 
 export default async function AdminKelasPage() {
   const supabase = await createClient()
 
 
-  // Fetch all required data in parallel for optimal database query performance
+  // Fetch classes & teachers in parallel while serving departments & academic years from server memory cache
   const [
     { data: classesList },
-    { data: departments },
-    { data: academicYears },
-    { data: teachers }
+    { data: teachers },
+    departments,
+    academicYears
   ] = await Promise.all([
     supabase
       .from("classes")
@@ -22,18 +23,12 @@ export default async function AdminKelasPage() {
       `)
       .order("name", { ascending: true }),
     supabase
-      .from("departments")
-      .select("id, name")
-      .order("name", { ascending: true }),
-    supabase
-      .from("academic_years")
-      .select("id, name, is_active")
-      .order("name", { ascending: false }),
-    supabase
       .from("profiles")
       .select("id, full_name")
       .eq("role", "wali_kelas")
-      .order("full_name", { ascending: true })
+      .order("full_name", { ascending: true }),
+    getCachedDepartments(),
+    getCachedAcademicYears()
   ])
 
   return (

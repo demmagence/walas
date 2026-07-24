@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { getCachedActiveAcademicYear } from '@/lib/data-cache'
 import { redirect, notFound } from 'next/navigation'
 import SubjectGradesClient from './subject-grades-client'
 
@@ -45,12 +46,8 @@ export default async function SubjectGradesPage({ params, searchParams }) {
     redirect('/dashboard/nilai')
   }
 
-  // Fetch active academic year
-  const { data: activeYear } = await supabase
-    .from('academic_years')
-    .select('id, name')
-    .eq('is_active', true)
-    .maybeSingle()
+  // Fetch active academic year from memory cache
+  const activeYear = await getCachedActiveAcademicYear()
 
   if (!activeYear) {
     return (

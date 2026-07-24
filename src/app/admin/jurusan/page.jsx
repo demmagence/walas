@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { getCachedDepartments } from "@/lib/data-cache"
 import AdminJurusanClient from "./admin-jurusan-client"
 
 export const metadata = {
@@ -7,14 +7,7 @@ export const metadata = {
 }
 
 export default async function AdminJurusanPage() {
-  const supabase = await createClient()
-
-
-  // Fetch all departments
-  const { data: departments } = await supabase
-    .from("departments")
-    .select("*")
-    .order("name", { ascending: true })
+  const departments = await getCachedDepartments()
 
   return (
     <div className="px-4 py-6 md:px-8 md:py-8">
