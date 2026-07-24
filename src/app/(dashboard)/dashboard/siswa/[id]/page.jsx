@@ -33,41 +33,40 @@ export default async function StudentDetailPage({ params }) {
     notFound()
   }
 
-  // Fetch parent name if parent_user_id is available
-  let parentName = null
-  if (student.parent_user_id) {
-    const { data: parentProfile } = await supabase
-      .from("profiles")
-      .select("full_name")
-      .eq("id", student.parent_user_id)
-      .single()
-    
-    if (parentProfile) {
-      parentName = parentProfile.full_name
-    }
-  }
+  // Fetch parent name, attendances, and grades in PARALLEL
+  const [
+    parentResult,
+    attendancesResult,
+    gradesResult
+  ] = await Promise.all([
+    student.parent_user_id
+      ? supabase
+          .from("profiles")
+          .select("full_name")
+          .eq("id", student.parent_user_id)
+          .single()
+      : Promise.resolve({ data: null }),
+    supabase
+      .from("attendances")
+      .select("id, date, status, note")
+      .eq("student_id", id)
+      .order("date", { ascending: false }),
+    supabase
+      .from("grades")
+      .select(`
+        id,
+        score,
+        semester,
+        subjects ( name ),
+        academic_years ( name )
+      `)
+      .eq("student_id", id)
+      .order("semester", { ascending: true })
+  ])
 
-  // Fetch attendances
-  const { data: attendances } = await supabase
-    .from("attendances")
-    .select("*")
-    .eq("student_id", id)
-    .order("date", { ascending: false })
-
-  // Fetch grades
-  const { data: grades } = await supabase
-    .from("grades")
-    .select(`
-      *,
-      subjects (
-        name
-      ),
-      academic_years (
-        name
-      )
-    `)
-    .eq("student_id", id)
-    .order("semester", { ascending: true })
+  const parentName = parentResult.data?.full_name || null
+  const attendances = attendancesResult.data || []
+  const grades = gradesResult.data || []
 
   return (
     <div className="px-4 py-6 md:px-8 md:py-8 max-w-4xl mx-auto">
