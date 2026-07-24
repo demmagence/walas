@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { getCachedAcademicYears } from "@/lib/data-cache"
 import AdminTahunAjaranClient from "./admin-tahun-ajaran-client"
 
 export const metadata = {
@@ -7,14 +7,7 @@ export const metadata = {
 }
 
 export default async function AdminTahunAjaranPage() {
-  const supabase = await createClient()
-
-
-  // Fetch all academic years
-  const { data: academicYears } = await supabase
-    .from("academic_years")
-    .select("*")
-    .order("name", { ascending: false })
+  const academicYears = await getCachedAcademicYears()
 
   return (
     <div className="px-4 py-6 md:px-8 md:py-8">

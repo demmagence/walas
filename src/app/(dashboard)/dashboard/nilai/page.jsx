@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { getCachedActiveAcademicYear } from '@/lib/data-cache'
 import { redirect } from 'next/navigation'
 import GradesClient from './grades-client'
 
@@ -14,12 +15,7 @@ export default async function NilaiPage() {
   const role = user.user_metadata?.role
 
   // Fetch active academic year
-  const { data: activeYear } = await supabase
-    .from('academic_years')
-    .select('id, name')
-    .eq('is_active', true)
-    .maybeSingle()
-
+  const activeYear = await getCachedActiveAcademicYear()
   const activeAcademicYearId = activeYear?.id || ''
 
   let initialSubjects = []

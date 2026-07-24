@@ -1,45 +1,35 @@
 import { createClient } from "@/lib/supabase/server"
+import { getCachedDepartments, getCachedAcademicYears } from "@/lib/data-cache"
 import AdminKelasClient from "./admin-kelas-client"
 
 export default async function AdminKelasPage() {
   const supabase = await createClient()
 
 
-  // Fetch all classes
-  const { data: classesList } = await supabase
-    .from("classes")
-    .select(`
-      *,
-      departments (
-        name
-      ),
-      academic_years (
-        name
-      ),
-      profiles (
-        full_name
-      )
-    `)
-    .order("name", { ascending: true })
-
-  // Fetch departments
-  const { data: departments } = await supabase
-    .from("departments")
-    .select("id, name")
-    .order("name", { ascending: true })
-
-  // Fetch academic years
-  const { data: academicYears } = await supabase
-    .from("academic_years")
-    .select("id, name, is_active")
-    .order("name", { ascending: false })
-
-  // Fetch homeroom teachers (profiles with role='wali_kelas')
-  const { data: teachers } = await supabase
-    .from("profiles")
-    .select("id, full_name")
-    .eq("role", "wali_kelas")
-    .order("full_name", { ascending: true })
+  // Fetch classes & teachers in parallel while serving departments & academic years from server memory cache
+  const [
+    { data: classesList },
+    { data: teachers },
+    departments,
+    academicYears
+  ] = await Promise.all([
+    supabase
+      .from("classes")
+      .select(`
+        *,
+        departments ( name ),
+        academic_years ( name ),
+        profiles ( full_name )
+      `)
+      .order("name", { ascending: true }),
+    supabase
+      .from("profiles")
+      .select("id, full_name")
+      .eq("role", "wali_kelas")
+      .order("full_name", { ascending: true }),
+    getCachedDepartments(),
+    getCachedAcademicYears()
+  ])
 
   return (
     <div className="px-4 py-6 md:px-8 md:py-8">
